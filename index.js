@@ -16,6 +16,8 @@ glob.sync("./all_zips/*.geojson").forEach(file => {
 
   for (const feature of data.features) {
 
+    console.log(feature.properties.地番);
+
     if (!feature.properties.地番.match(/^[0-9]/)) {
       continue;
     }
