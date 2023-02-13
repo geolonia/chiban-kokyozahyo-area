@@ -1,9 +1,25 @@
+#!/usr/bin/env node
+
 const glob = require("glob")
 const fs = require("fs")
 const turf = require("@turf/turf")
 const path = require("path")
+const { createArrayCsvWriter } = require('csv-writer')
+const csvHeaders = ["code", "area"]
+
 const cityTotals = {}
+const cityTotalsCSV = []
+const cityTotalsCSVWriter = createArrayCsvWriter({
+  path: 'city_kokyozahyo_area.csv',
+  header: csvHeaders
+})
+
 const prefTotals = {}
+const prefTotalsCSV = []
+const prefTotalsCSVWriter = createArrayCsvWriter({
+  path: 'pref_kokyozahyo_area.csv',
+  header: csvHeaders
+})
 
 glob.sync("./all_zips/*.geojson").forEach(file => {
 
@@ -35,9 +51,11 @@ glob.sync("./all_zips/*.geojson").forEach(file => {
 })
 
 for (const [code, area] of Object.entries(prefTotals)) {
-  console.log(`${code},${area}`)
+  prefTotalsCSV.push([code, area])
 }
+prefTotalsCSVWriter.writeRecords(prefTotalsCSV)
 
 for (const [code, area] of Object.entries(cityTotals)) {
-  console.log(`${code},${area}`)
+  cityTotalsCSV.push([code, area])
 }
+cityTotalsCSVWriter.writeRecords(cityTotalsCSV)

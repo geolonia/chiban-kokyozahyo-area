@@ -3,7 +3,7 @@
 set -ex
 
 # 都道府県ごとに実行する
-for i in {1}
+for i in {1..47}
 do
 
   # もし zips ディレクトリがあれば削除
@@ -43,9 +43,12 @@ do
   mkdir ignore
   cat ninni_zahyou.txt | xargs -I '{}' mv ./all_zips/'{}' ./ignore/
 
-  find ./all_zips -name '*.zip' -print0 | parallel -0 ./convert_in_place.sh
+  find ./all_zips -name '*.zip' -print0 | parallel -0 ./util/convert_in_place.sh
 
   #node js の script を実行
-  node index.js
+  node kokyozahyo-area-calc.js
+
+  mv pref_kokyozahyo_area.csv ./output/$num-pref-kokyozahyo-area.csv
+  mv city_kokyozahyo_area.csv ./output/$num-city-kokyozahyo-area.csv
 
 done
