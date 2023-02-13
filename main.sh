@@ -3,7 +3,7 @@
 set -ex
 
 # 都道府県ごとに実行する
-for i in {1..47}
+for i in {1}
 do
 
   # もし zips ディレクトリがあれば削除
@@ -34,18 +34,18 @@ do
   do
     echo $url
     wget -P zips $url
-  done &
-
-  wait
+  done
 
   find ./zips -name '*.zip' | xargs -P 0 -I '{}' unzip '{}' -d ./all_zips
-  find ./all_zips -name '*.zip' | parallel 'zipgrep -l "<座標系>任意座標系</座標系>"' > ninni_zahyou.txt
-
+  find ./all_zips -name '*.zip' | parallel 'zipgrep -l "<座標系>任意座標系</座標系>" {} || true' > ninni_zahyou.txt
+  
   sed -i "" 's/.xml/.zip/' ninni_zahyou.txt
   mkdir ignore
   cat ninni_zahyou.txt | xargs -I '{}' mv ./all_zips/'{}' ./ignore/
 
-  node js の script を実行
+  find ./all_zips -name '*.zip' -print0 | parallel -0 ./convert_in_place.sh
+
+  #node js の script を実行
   node index.js
 
 done
