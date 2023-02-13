@@ -1,3 +1,0 @@
-https://www.geospatial.jp/ckan/dataset/eec97d90-8338-456d-8684-1993def3f914/resource/2773b2b2-e001-4dc7-95e3-ac5de9b5b73d/download/30422-1704.zip
-https://www.geospatial.jp/ckan/dataset/33dd1f48-1a8f-4b32-8505-6623205972de/resource/50fd2840-b862-4e66-8e2f-f8a1e9715314/download/30428-1704.zip
-https://www.geospatial.jp/ckan/dataset/6db86333-b7e6-48f5-91b8-a5565171e408/resource/f129fe8d-115b-40b1-98c7-422ac534ef7f/download/30406-1702.zip
