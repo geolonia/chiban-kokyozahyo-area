@@ -30,7 +30,7 @@ do
   echo $num
 
   #urls.txt の中から donwload/num/ を含む行を抽出して、wget でダウンロード
-  cat urls-test.txt | grep "download/$num" | while read url
+  cat urls.txt | grep "download/$num" | while read url
   do
     echo $url
     wget -P zips $url
