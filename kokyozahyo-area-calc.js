@@ -9,10 +9,6 @@ const csvHeaders = ["code", "area"]
 
 const cityTotals = {}
 const cityTotalsCSV = []
-const cityTotalsCSVWriter = createArrayCsvWriter({
-  path: 'city_kokyozahyo_area.csv',
-  header: csvHeaders
-})
 
 const prefTotals = {}
 const prefTotalsCSV = []
@@ -21,16 +17,23 @@ const prefTotalsCSVWriter = createArrayCsvWriter({
   header: csvHeaders
 })
 
-glob.sync("./all_zips/*.geojson").forEach(file => {
+let code;
+let prefCode;
+
+glob.sync("./*.ndgeojson").forEach(file => {
 
   const raw = fs.readFileSync(file, "utf8");
-  const data = JSON.parse(raw);
+  const features = raw.split("\n")
 
-  const basename = path.basename(file, ".geojson")
-  const code = basename.split("-")[0]
-  const prefCode = code.slice(0, 2)
+  for (const raw of features) {
+    if (!raw) {
+      continue;
+    }
 
-  for (const feature of data.features) {
+    const feature = JSON.parse(raw)
+    const basename = path.basename(file, ".ndgeojson")
+    code = basename.split("-")[0]
+    prefCode = code.slice(0, 2)
 
     if (!feature.properties.地番.match(/^[0-9]/)) {
       continue;
@@ -48,14 +51,21 @@ glob.sync("./all_zips/*.geojson").forEach(file => {
     }
     cityTotals[code] += area
   }
+
 })
 
 for (const [code, area] of Object.entries(prefTotals)) {
   prefTotalsCSV.push([code, area])
 }
-prefTotalsCSVWriter.writeRecords(prefTotalsCSV)
+createArrayCsvWriter({
+  path: `./output/${prefCode}_kokyozahyo_area.csv`,
+  header: csvHeaders
+}).writeRecords(prefTotalsCSV)
 
 for (const [code, area] of Object.entries(cityTotals)) {
   cityTotalsCSV.push([code, area])
 }
-cityTotalsCSVWriter.writeRecords(cityTotalsCSV)
+createArrayCsvWriter({
+  path: `./output/${code}_kokyozahyo_area.csv`,
+  header: csvHeaders
+}).writeRecords(cityTotalsCSV)
