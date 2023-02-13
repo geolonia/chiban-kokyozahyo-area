@@ -12,15 +12,11 @@ const cityTotalsCSV = []
 
 const prefTotals = {}
 const prefTotalsCSV = []
-const prefTotalsCSVWriter = createArrayCsvWriter({
-  path: 'pref_kokyozahyo_area.csv',
-  header: csvHeaders
-})
 
 let code;
 let prefCode;
 
-glob.sync("./*.ndgeojson").forEach(file => {
+glob.sync("../all_zips/*.ndgeojson").forEach(file => {
 
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
