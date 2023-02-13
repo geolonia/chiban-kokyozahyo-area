@@ -5,6 +5,8 @@ const fs = require("fs")
 const turf = require("@turf/turf")
 const path = require("path")
 const { createArrayCsvWriter } = require('csv-writer')
+const progressBar = require("progress-bar-cli");
+let startTime = new Date();
 const csvHeaders = ["code", "area"]
 
 const cityTotals = {}
@@ -16,7 +18,10 @@ const prefTotalsCSV = []
 let code;
 let prefCode;
 
-glob.sync("../all_zips/*.ndgeojson").forEach(file => {
+const files = glob.sync("../all_zips/*.ndgeojson");
+files.forEach((file, index) => {
+
+  progressBar.progressBar(index, files.length, startTime);
 
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
