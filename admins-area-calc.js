@@ -3,7 +3,13 @@ const glob = require("glob")
 const fs = require("fs")
 const path = require("path")
 const turf = require("@turf/turf")
+const { createArrayCsvWriter } = require('csv-writer')
+
+const csvHeaders = ["code", "area"]
 const cityTotals = {}
+const cityTotalsCSV = []
+const prefTotals = {}
+const prefTotalsCSV = []
 
 glob.sync("./admins/*/*.json").forEach((file, index) => {
 
@@ -20,10 +26,32 @@ glob.sync("./admins/*/*.json").forEach((file, index) => {
     }
 
     cityTotals[code] += area
-  }
 
+    if (!prefTotals[prefCode]) {
+      prefTotals[prefCode] = 0
+    }
+
+    prefTotals[prefCode] += area
+  }
 })
 
 for (const [code, area] of Object.entries(cityTotals)) {
-  console.log(code, area)
+  cityTotalsCSV.push([code, area])
 }
+createArrayCsvWriter({
+  path: `./output_admins/city_admins_area.csv`,
+  header: csvHeaders
+}).writeRecords(cityTotalsCSV)
+
+for (const [code, area] of Object.entries(prefTotals)) {
+  prefTotalsCSV.push([code, area])
+}
+createArrayCsvWriter({
+  path: `./output_admins/pref_admins_area.csv`,
+  header: csvHeaders
+}).writeRecords(prefTotalsCSV)
+
+
+
+
+
