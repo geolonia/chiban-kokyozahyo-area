@@ -19,6 +19,11 @@ for (const file of files) {
     }
 
     const 筆feature = JSON.parse(raw)
+    
+    if (!筆feature.properties.地番.match(/^[0-9]/)) {
+      continue;
+    }
+
     const code = 筆feature.properties.市区町村コード
     const prefCode = code.slice(0, 2)
 
@@ -27,26 +32,19 @@ for (const file of files) {
 
     let is筆InsideCity;
 
-    // 市区町村ポリゴンをループする。筆のポリゴンがいずれかの市区町村ポリゴンの内側にあるかどうかを調べる
+    // 市区町村ポリゴンをループする
     for (const cityFeature of city.features) {
 
-      // generate feature Collection from feature
+      // 筆の凸包を計算しポリゴンを作る
+      const hullPolygon = turf.convex(筆feature)
 
-      // マルチポリゴンから ポイントの featureCollection を作る
-      const points = turf.explode(筆feature)
+      is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
 
-      // ポイントの featureCollection から convex hull を作る
-      const hullPolygon = turf.concave(points)
-      out = hullPolygon
-
-      // is筆InsideCity = turf.booleanWithin(筆feature, cityFeature)
-
-      // if (is筆InsideCity) {
-      //   break
-      // }
+      if (is筆InsideCity) {
+        break
+      }
     }
 
-
+    console.log(`${file} ${筆feature.properties.地番} ${is筆InsideCity}`)
   }
 }
-console.log(JSON.stringify(out))
