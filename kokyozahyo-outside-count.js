@@ -14,6 +14,10 @@ for (const file of files) {
       continue;
     }
     const feature = JSON.parse(raw)
+    const code = feature.properties.市区町村コード
+    const prefCode = code.slice(0, 2)
+
+    const cityData = fs.readFileSync(`./admins/${prefCode}/${code}.json`, "utf8");
 
   }
 }
