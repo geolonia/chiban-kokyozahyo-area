@@ -3,6 +3,8 @@ const glob = require("glob")
 const fs = require("fs")
 const turf = require("@turf/turf");
 const { createArrayCsvWriter } = require('csv-writer')
+const progressBar = require("progress-bar-cli");
+let startTime = new Date();
 const cityTotals = {}
 const cityTotalsCSV = []
 
@@ -16,6 +18,9 @@ const files = glob.sync("./all_zips/*.ndgeojson");
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
+
+  progressBar.progressBar(files.indexOf(file), files.length, startTime);
+  
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
 
