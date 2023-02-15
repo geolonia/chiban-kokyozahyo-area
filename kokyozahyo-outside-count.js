@@ -11,8 +11,11 @@ const prefTotalsCSV = []
 
 const outsideFiles = []
 
-// const files = glob.sync("../all_zips/*.ndgeojson"); TODO: 本番ではこっち
-const files = glob.sync("./all_zips/*.ndgeojson"); 
+const args = process.argv.slice(2)
+const prefCode = args[0] // 都道府県コードを第一引数で指定する
+
+// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);  TODO: 本番ではこっち
+const files = glob.sync(`./all_zips/${prefCode}*.ndgeojson`); 
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
@@ -33,7 +36,6 @@ for (const file of files) {
 
     const basename = file.split("/").pop().split(".")[0]
     const code = 筆feature.properties.市区町村コード
-    const prefCode = code.slice(0, 2)
 
     const cityData = fs.readFileSync(`./admins/${prefCode}/${code}.json`, "utf8");
     const city = JSON.parse(cityData)
@@ -95,7 +97,7 @@ for (const [code, data] of Object.entries(cityTotals)) {
 }
 
 const csvWriterCity = createArrayCsvWriter({
-  path: './output_kokyozahyo_outside/city_kokyozahyo_outside.csv',
+  path: `./output_kokyozahyo_outside/${prefCode}_city_kokyozahyo_outside.csv`,
   header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
 })
 csvWriterCity.writeRecords(cityTotalsCSV)
@@ -106,13 +108,13 @@ for (const [code, data] of Object.entries(prefTotals)) {
 }
 
 const csvWriterPref = createArrayCsvWriter({
-  path: './output_kokyozahyo_outside/pref_kokyozahyo_outside.csv',
+  path: `./output_kokyozahyo_outside/${prefCode}_pref_kokyozahyo_outside.csv`,
   header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
 })
 csvWriterPref.writeRecords(prefTotalsCSV)
 
 const csvWriterOutside = createArrayCsvWriter({
-  path: './output_kokyozahyo_outside/all_kyokyozahyo_outside_files.csv',
+  path: `./output_kokyozahyo_outside/${prefCode}_all_kyokyozahyo_outside_files.csv`,
   header: ['code', 'zip_file', '市区町村名', '地番']
 })
 csvWriterOutside.writeRecords(outsideFiles)
