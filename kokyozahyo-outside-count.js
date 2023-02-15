@@ -14,8 +14,7 @@ const outsideFiles = []
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
-// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);  TODO: 本番ではこっち
-const files = glob.sync(`./all_zips/${prefCode}*.ndgeojson`); 
+const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
