@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@turf/turf": "^6.5.0",
+    "csv-parse": "^5.3.5",
     "csv-writer": "^1.6.0",
     "glob": "^8.1.0",
     "progress-bar-cli": "^1.0.4"
