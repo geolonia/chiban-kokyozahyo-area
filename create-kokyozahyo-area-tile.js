@@ -16,13 +16,14 @@ let kokyozahyo = parse(kokyozahyo_area);
 
 let features = []
 
-const files = glob.sync("./admins/01/01101.json");
+const files = glob.sync("./admins/*/*.json");
 files.forEach((file, index) => {
 
   const raw = fs.readFileSync(file, "utf8")
   const data = JSON.parse(raw)
   const code = path.basename(file, ".json")
-  // const prefCode = code.slice(0, 2)
+
+  console.log(code)
 
   const matched_admins = admins.filter((admin) => {
     return admin[0] === code
