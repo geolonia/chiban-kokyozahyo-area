@@ -3,6 +3,8 @@ const glob = require("glob")
 const fs = require("fs")
 const turf = require("@turf/turf");
 const { createArrayCsvWriter } = require('csv-writer')
+const { updateLatestCityCode } = require("./util/update-latest-city-code")
+
 const cityTotals = {}
 const cityTotalsCSV = []
 
@@ -35,7 +37,7 @@ for (const file of files) {
     }
 
     const basename = file.split("/").pop().split(".")[0]
-    const code = 筆feature.properties.市区町村コード
+    const code = updateLatestCityCode(筆feature.properties.市区町村コード)
 
     const cityData = fs.readFileSync(`./admins/${prefCode}/${code}.json`, "utf8");
     const city = JSON.parse(cityData)

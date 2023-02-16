@@ -6,6 +6,7 @@ const turf = require("@turf/turf")
 const path = require("path")
 const { createArrayCsvWriter } = require('csv-writer')
 const progressBar = require("progress-bar-cli");
+const { updateLatestCityCode } = require("./util/update-latest-city-code")
 let startTime = new Date();
 const csvHeaders = ["code", "area"]
 
@@ -33,8 +34,10 @@ files.forEach((file, index) => {
 
     const feature = JSON.parse(raw)
     const basename = path.basename(file, ".ndgeojson")
-    code = basename.split("-")[0]
+    code = updateLatestCityCode(basename.split("-")[0])
     prefCode = code.slice(0, 2)
+
+
 
     if (!feature.properties.地番.match(/^[0-9]/)) {
       continue;
