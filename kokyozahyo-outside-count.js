@@ -39,7 +39,7 @@ for (const file of files) {
     const basename = file.split("/").pop().split(".")[0]
     const code = updateLatestCityCode(筆feature.properties.市区町村コード)
 
-    const cityData = fs.readFileSync(`./admins/${prefCode}/${code}.json`, "utf8");
+    const cityData = fs.readFileSync(`./data/admins/${prefCode}/${code}.json`, "utf8");
     const city = JSON.parse(cityData)
 
     let is筆InsideCity;

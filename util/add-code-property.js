@@ -3,7 +3,7 @@
 const glob = require("glob")
 const fs = require("fs")
 const path = require("path")
-const files = glob.sync(path.join(__dirname, "../admins/**/*.json"));
+const files = glob.sync(path.join(__dirname, "../data/admins/**/*.json"));
 console.log(files)
 
 for (const file of files) {

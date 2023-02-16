@@ -11,7 +11,7 @@ const cityTotalsCSV = []
 const prefTotals = {}
 const prefTotalsCSV = []
 
-glob.sync("./admins/*/*.json").forEach((file, index) => {
+glob.sync("./data/admins/*/*.json").forEach((file, index) => {
 
   const raw = fs.readFileSync(file, "utf8")
   const data = JSON.parse(raw)
@@ -39,7 +39,7 @@ for (const [code, area] of Object.entries(cityTotals)) {
   cityTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output_admins/city_admins_area.csv`,
+  path: `./output_data/admins/city_data/admins_area.csv`,
   header: csvHeaders
 }).writeRecords(cityTotalsCSV)
 
@@ -47,7 +47,7 @@ for (const [code, area] of Object.entries(prefTotals)) {
   prefTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output_admins/pref_admins_area.csv`,
+  path: `./output_data/admins/pref_data/admins_area.csv`,
   header: csvHeaders
 }).writeRecords(prefTotalsCSV)
 
