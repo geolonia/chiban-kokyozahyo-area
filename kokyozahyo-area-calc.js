@@ -60,7 +60,7 @@ for (const [code, area] of Object.entries(cityTotals)) {
   cityTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output_kokyozahyo/city_kokyozahyo_area.csv`,
+  path: `./output/city_kokyozahyo_area.csv`,
   header: csvHeaders
 }).writeRecords(cityTotalsCSV)
 
@@ -68,6 +68,6 @@ for (const [code, area] of Object.entries(prefTotals)) {
   prefTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output_kokyozahyo/pref_kokyozahyo_area.csv`,
+  path: `./output/pref_kokyozahyo_area.csv`,
   header: csvHeaders
 }).writeRecords(prefTotalsCSV)

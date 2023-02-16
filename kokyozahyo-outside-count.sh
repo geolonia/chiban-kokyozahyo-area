@@ -7,7 +7,7 @@ do
   echo node kokyozahyo-outside-count.js $num
 done | parallel
 
-TARGET_DIR=output_kokyozahyo_outside
+TARGET_DIR=output
 
 # *_all_kyokyozahyo_outside_files.csv を結合する
 ALL_OUTSIDE_FILE=$TARGET_DIR/all_kokyozahyo_outside.csv

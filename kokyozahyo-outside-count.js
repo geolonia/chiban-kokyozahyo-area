@@ -99,7 +99,7 @@ for (const [code, data] of Object.entries(cityTotals)) {
 }
 
 const csvWriterCity = createArrayCsvWriter({
-  path: `./output_kokyozahyo_outside/${prefCode}_city_kokyozahyo_outside.csv`,
+  path: `./output/${prefCode}_city_kokyozahyo_outside.csv`,
   header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
 })
 csvWriterCity.writeRecords(cityTotalsCSV)
@@ -110,13 +110,13 @@ for (const [code, data] of Object.entries(prefTotals)) {
 }
 
 const csvWriterPref = createArrayCsvWriter({
-  path: `./output_kokyozahyo_outside/${prefCode}_pref_kokyozahyo_outside.csv`,
+  path: `./output/${prefCode}_pref_kokyozahyo_outside.csv`,
   header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
 })
 csvWriterPref.writeRecords(prefTotalsCSV)
 
 const csvWriterOutside = createArrayCsvWriter({
-  path: `./output_kokyozahyo_outside/${prefCode}_all_kyokyozahyo_outside_files.csv`,
+  path: `./output/${prefCode}_all_kyokyozahyo_outside_files.csv`,
   header: ['code', 'zip_file', '市区町村名', '地番']
 })
 csvWriterOutside.writeRecords(outsideFiles)
