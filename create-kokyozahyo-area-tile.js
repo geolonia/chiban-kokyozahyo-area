@@ -15,6 +15,7 @@ let kokyozahyo_area = fs.readFileSync(path.join(__dirname, 'output_kokyozahyo/ci
 let kokyozahyo = parse(kokyozahyo_area);
 
 const files = glob.sync("./admins/*/*.json");
+const excludes = []
 
 for (const file of files) {
 
@@ -31,11 +32,12 @@ for (const file of files) {
     return kokyozahyo[0] === code
   })
 
-  if (matched_admins.length === 0 || matched_kokyozahyo.length === 0) {
+  if (matched_kokyozahyo.length === 0) {
+    // admins にあり、kokyozahyo にないコード
     console.log("not found", code)
+    excludes.push(code)
     continue
   }
-
 
   for (const feature of data.features) {
 
@@ -50,3 +52,5 @@ for (const file of files) {
   fs.writeFileSync(file, JSON.stringify(data))
 
 }
+
+console.log("スキップ合計:", excludes.length)
