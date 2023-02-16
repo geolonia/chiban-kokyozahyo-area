@@ -5,7 +5,7 @@ const path = require("path")
 const turf = require("@turf/turf")
 const { createArrayCsvWriter } = require('csv-writer')
 
-const csvHeaders = ["code", "area"]
+const csvHeaders = ["code", "total_area"]
 const cityTotals = {}
 const cityTotalsCSV = []
 const prefTotals = {}

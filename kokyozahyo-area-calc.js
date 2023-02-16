@@ -8,7 +8,7 @@ const { createArrayCsvWriter } = require('csv-writer')
 const progressBar = require("progress-bar-cli");
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
 let startTime = new Date();
-const csvHeaders = ["code", "area"]
+const csvHeaders = ["code", "kokyozahyo_area"]
 
 const cityTotals = {}
 const cityTotalsCSV = []
