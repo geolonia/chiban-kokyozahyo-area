@@ -37,8 +37,6 @@ files.forEach((file, index) => {
     code = updateLatestCityCode(basename.split("-")[0])
     prefCode = code.slice(0, 2)
 
-
-
     if (!feature.properties.地番.match(/^[0-9]/)) {
       continue;
     }
