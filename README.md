@@ -6,7 +6,7 @@
 
 https://geolonia.github.io/chiban-zahyo-map/
 
-## 【計算式】
+## 【計算方法】
 
 ### 公共座標の筆の件数
 
