@@ -2,7 +2,9 @@
 
 ## 【概要】
 
-このドキュメントでは、法務省の登記所備付地図データを元に作成した、公共座標整理状況マップ（https://geolonia.github.io/chiban-zahyo-map） で可視化しているデータの計算方法とデータソースについて説明します。
+このドキュメントでは、法務省の登記所備付地図データを元に作成した、[公共座標整理状況マップ](https://geolonia.github.io/chiban-zahyo-map) で可視化しているデータの計算方法とデータソースについて説明します。
+
+https://geolonia.github.io/chiban-zahyo-map/
 
 ## 【計算式】
 
