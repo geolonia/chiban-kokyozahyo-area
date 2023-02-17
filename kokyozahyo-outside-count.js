@@ -4,28 +4,27 @@ const fs = require("fs")
 const turf = require("@turf/turf");
 const { createArrayCsvWriter } = require('csv-writer')
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
-
-const cityTotals = {}
-const cityTotalsCSV = []
-
-const prefTotals = {}
-const prefTotalsCSV = []
-
+const progressBar = require("progress-bar-cli");
+let startTime = new Date();
 const outsideFiles = []
 
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
 const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
+// const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
   
+  progressBar.progressBar(files.indexOf(file), files.length, startTime);
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
+  let is筆InsideCity = false;
 
   // 筆ごとに処理する
   for (const raw of features) {
+
     if (!raw) {
       continue;
     }
@@ -39,10 +38,16 @@ for (const file of files) {
     const basename = file.split("/").pop().split(".")[0]
     const code = updateLatestCityCode(筆feature.properties.市区町村コード)
 
-    const cityData = fs.readFileSync(`./data/admins/${prefCode}/${code}.json`, "utf8");
-    const city = JSON.parse(cityData)
+    let cityData;
+    // ファイルが存在するかチェックする
+    try {
+      cityData = fs.readFileSync(`./data/admins/${prefCode}/${code}.json`, "utf8");
+    } catch (e) {
+      console.log(`./data/admins/${prefCode}/${code}.json が存在しません`)
+      continue;
+    }
 
-    let is筆InsideCity;
+    const city = JSON.parse(cityData)
 
     // 市区町村ポリゴンをループする
     for (const cityFeature of city.features) {
@@ -52,72 +57,21 @@ for (const file of files) {
 
       is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
 
-      if (is筆InsideCity) {
+      if (!is筆InsideCity) {
         break
       }
     }
-
-    if (!cityTotals[code]) {
-      cityTotals[code] = {}
-    }
-
-    if (!cityTotals[code]['kokyozahyo_total']) {
-      cityTotals[code]['kokyozahyo_total'] = 0
-    }
-    cityTotals[code]['kokyozahyo_total'] += 1
-
-    if (!prefTotals[prefCode]) {
-      prefTotals[prefCode] = {}
-    }
-
-    if (!prefTotals[prefCode]['kokyozahyo_total']) {
-      prefTotals[prefCode]['kokyozahyo_total'] = 0
-    }
-
-    prefTotals[prefCode]['kokyozahyo_total'] += 1
-    
     
     if (!is筆InsideCity) {
-
-      if (!cityTotals[code]['kokyozahyo_outside']) {
-        cityTotals[code]['kokyozahyo_outside'] = 0
-      }
-      cityTotals[code]['kokyozahyo_outside'] += 1
-
-      if (!prefTotals[prefCode]['kokyozahyo_outside']) {
-        prefTotals[prefCode]['kokyozahyo_outside'] = 0
-      }
-      prefTotals[prefCode]['kokyozahyo_outside'] += 1
-
-      outsideFiles.push([code, `${basename}.zip`, 筆feature.properties.市区町村名, 筆feature.properties.地番])
+      outsideFiles.push([`${basename}.zip`, 筆feature.properties.市区町村名])
+      break;
     }
   }
 }
 
-for (const [code, data] of Object.entries(cityTotals)) {
-  cityTotalsCSV.push([code, data.kokyozahyo_total, data.kokyozahyo_outside])
-}
-
-const csvWriterCity = createArrayCsvWriter({
-  path: `./output/${prefCode}_city_kokyozahyo_outside.csv`,
-  header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
-})
-csvWriterCity.writeRecords(cityTotalsCSV)
-
-
-for (const [code, data] of Object.entries(prefTotals)) {
-  prefTotalsCSV.push([code, data.kokyozahyo_total, data.kokyozahyo_outside])
-}
-
-const csvWriterPref = createArrayCsvWriter({
-  path: `./output/${prefCode}_pref_kokyozahyo_outside.csv`,
-  header: ['code', 'kokyozahyo_total', 'kokyozahyo_outside']
-})
-csvWriterPref.writeRecords(prefTotalsCSV)
-
 const csvWriterOutside = createArrayCsvWriter({
   path: `./output/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-  header: ['code', 'zip_file', '市区町村名', '地番']
+  header: ['zip_file', '市区町村名']
 })
 csvWriterOutside.writeRecords(outsideFiles)
 
