@@ -19,7 +19,7 @@ const prefTotalsCSV = []
 let code;
 let prefCode;
 
-const files = glob.sync("../all_zips/*.ndgeojson");
+const files = glob.sync("./test/*.ndgeojson");
 files.forEach((file, index) => {
 
   progressBar.progressBar(index, files.length, startTime);
@@ -42,7 +42,7 @@ files.forEach((file, index) => {
     }
     
     const area = turf.area(feature) // in square meters
-    const area_km = area / 1000000
+    const area_km = Math.round(area / 1000000)
 
     if (!prefTotals[prefCode]) {
       prefTotals[prefCode] = 0
