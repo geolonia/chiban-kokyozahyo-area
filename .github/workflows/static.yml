@@ -37,9 +37,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc
           mkdir docs
-      - name: Convert README to HTML
-        run: |
-          pandoc README.md -f markdown -t html -o docs/index.html
+          mv README.md ./docs/README.md
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
