@@ -19,7 +19,7 @@ const prefTotalsCSV = []
 let code;
 let prefCode;
 
-const files = glob.sync("./test/*.ndgeojson");
+const files = glob.sync("../all_zips/*.ndgeojson");
 files.forEach((file, index) => {
 
   progressBar.progressBar(index, files.length, startTime);
