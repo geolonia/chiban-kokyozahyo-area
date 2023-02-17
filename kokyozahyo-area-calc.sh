@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 if [ ! -d output ]; then
   mkdir output
