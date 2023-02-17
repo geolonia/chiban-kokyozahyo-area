@@ -38,12 +38,12 @@ jobs:
           sudo apt-get install -y pandoc
       - name: Convert README to HTML
         run: |
-          pandoc README.md -f markdown -t html -o index.html
+          pandoc README.md -f markdown -t html -o docs/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: '.'
+          path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
