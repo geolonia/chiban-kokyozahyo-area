@@ -4,7 +4,7 @@
 
 このドキュメントでは、法務省の登記所備付地図データを元に作成した、[公共座標整理状況マップ](https://geolonia.github.io/chiban-zahyo-map) で可視化しているデータの計算方法とデータソースについて説明します。
 
-https://geolonia.github.io/chiban-zahyo-map/
+[https://geolonia.github.io/chiban-zahyo-map/](https://geolonia.github.io/chiban-zahyo-map/)
 
 ## 【計算方法】
 
@@ -16,8 +16,8 @@ https://geolonia.github.io/chiban-zahyo-map/
 公共座標の比率 =  (公共座標の件数 / 数字で始まる地番の件数) * 100
 任意座標の比率 =  (任意座標の件数 / 数字で始まる地番の件数) * 100
 ```
-- 公共座標のzipファイル名を取得する手順（https://gist.github.com/keichan34/d6e8f283bb5810d6f4aa8d941f9a824c）
-- 集計に使用したスクリプト（https://github.com/geolonia/moj-counts）
+- 公共座標のzipファイル名を取得する手順（[https://gist.github.com/keichan34/d6e8f283bb5810d6f4aa8d941f9a824c](https://gist.github.com/keichan34/d6e8f283bb5810d6f4aa8d941f9a824c)）
+- 集計に使用したスクリプト（[https://github.com/geolonia/moj-counts](https://github.com/geolonia/moj-counts)）
 - 公共座標と任意座標の比率は、[Math.round](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Math/round) を使用して四捨五入して整数として表示しています。
 
 ### 公共座標の筆の面積
