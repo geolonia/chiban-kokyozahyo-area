@@ -17,8 +17,8 @@ const prefTotalsCSV = []
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
-// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
-const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
+const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
+// const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 files.forEach((file, index) => {
 
   const raw = fs.readFileSync(file, "utf8");
