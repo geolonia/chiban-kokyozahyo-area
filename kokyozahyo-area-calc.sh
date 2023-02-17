@@ -15,7 +15,7 @@ do
 done | parallel
 
 TARGET_DIR=output
-CSV_HEADER="code, kokyozahyo_area"
+CSV_HEADER="code,kokyozahyo_area"
 
 # *_pref_kyokyozahyo_outside_files.csv を結合する
 PREF_COUNT_FILE=$TARGET_DIR/pref_kokyozahyo_area.csv
