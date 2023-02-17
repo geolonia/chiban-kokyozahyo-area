@@ -5,9 +5,7 @@ const fs = require("fs")
 const turf = require("@turf/turf")
 const path = require("path")
 const { createArrayCsvWriter } = require('csv-writer')
-const progressBar = require("progress-bar-cli");
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
-let startTime = new Date();
 const csvHeaders = ["code", "kokyozahyo_area"]
 
 const cityTotals = {}
@@ -17,12 +15,11 @@ const prefTotals = {}
 const prefTotalsCSV = []
 
 let code;
-let prefCode;
+const args = process.argv.slice(2)
+const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
-const files = glob.sync("../all_zips/*.ndgeojson");
+const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
 files.forEach((file, index) => {
-
-  progressBar.progressBar(index, files.length, startTime);
 
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
@@ -61,7 +58,7 @@ for (const [code, area] of Object.entries(cityTotals)) {
   cityTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output/city_kokyozahyo_area.csv`,
+  path: `./output/${prefCode}_city_kokyozahyo_area.csv`,
   header: csvHeaders
 }).writeRecords(cityTotalsCSV)
 
@@ -69,6 +66,6 @@ for (const [code, area] of Object.entries(prefTotals)) {
   prefTotalsCSV.push([code, area])
 }
 createArrayCsvWriter({
-  path: `./output/pref_kokyozahyo_area.csv`,
+  path: `./output/${prefCode}_pref_kokyozahyo_area.csv`,
   header: csvHeaders
 }).writeRecords(prefTotalsCSV)
