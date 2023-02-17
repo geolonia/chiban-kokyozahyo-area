@@ -13,10 +13,3 @@ node kokyozahyo-area-calc.js
 ```
 bash kokyozahyo-area-tile.sh
 ```
-
-
-## 都道府県、市区町村の面積を計算
-
-```
-node admins-area-calc.js
-```
