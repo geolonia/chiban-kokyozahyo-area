@@ -14,7 +14,6 @@ const cityTotalsCSV = []
 const prefTotals = {}
 const prefTotalsCSV = []
 
-let code;
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
@@ -31,8 +30,7 @@ files.forEach((file, index) => {
 
     const feature = JSON.parse(raw)
     const basename = path.basename(file, ".ndgeojson")
-    code = updateLatestCityCode(basename.split("-")[0])
-    prefCode = code.slice(0, 2)
+    const code = updateLatestCityCode(basename.split("-")[0])
 
     if (!feature.properties.地番.match(/^[0-9]/)) {
       continue;

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
 for i in {1..47}
 do
   num=$(printf "%02d" $i)
-  echo kokyozahyo-area-calc.js $num
+  echo node kokyozahyo-area-calc.js $num
 done | parallel
 
 # TARGET_DIR=output
