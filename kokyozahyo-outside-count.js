@@ -17,11 +17,12 @@ const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
   
-  progressBar.progressBar(files.indexOf(file), files.length, startTime);
+//progressBar.progressBar(files.indexOf(file), files.length, startTime);
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
   let is筆InsideCity = false;
 
+  console.log(file)
   // 筆ごとに処理する
   for (const raw of features) {
 
@@ -38,6 +39,7 @@ for (const file of files) {
     const basename = file.split("/").pop().split(".")[0]
     const code = updateLatestCityCode(筆feature.properties.市区町村コード)
 
+    console.log(code)
     let cityData;
     // ファイルが存在するかチェックする
     try {
@@ -52,6 +54,7 @@ for (const file of files) {
     // 市区町村ポリゴンをループする
     for (const cityFeature of city.features) {
 
+      console.log(cityFeature)
       // 筆の凸包を計算しポリゴンを作る
       const hullPolygon = turf.convex(筆feature)
 
@@ -61,7 +64,8 @@ for (const file of files) {
         break
       }
     }
-    
+
+    console.log(is筆InsideCity)
     if (!is筆InsideCity) {
       outsideFiles.push([`${basename}.zip`, 筆feature.properties.市区町村名])
       break;
