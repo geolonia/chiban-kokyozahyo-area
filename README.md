@@ -43,3 +43,6 @@
 
 
 ## 【データーソース】
+- [「登記所備付データ」（法務省）](https://front.geospatial.jp/houmu-chiseki/)を加工して作成
+- [「全国都道府県市区町村別面積調」（国土地理院）](https://www.gsi.go.jp/KOKUJYOHO/OLD-MENCHO-title.htm)を加工して作成
+- [「国土数値情報（行政区域データ）」（国土交通省）](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-v3_1.html)を加工して作成
