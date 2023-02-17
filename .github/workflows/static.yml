@@ -30,17 +30,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Markdown to HTML
-        uses: lifepal/markdown-to-html@v1.2
-        with:
-          text: README.md
       - name: Setup Pages
         uses: actions/configure-pages@v3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+      - name: Convert README to HTML
+        run: |
+          pandoc README.md -f markdown -t html -o index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: './README.md'
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
