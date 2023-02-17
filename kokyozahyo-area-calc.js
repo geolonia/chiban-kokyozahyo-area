@@ -42,16 +42,17 @@ files.forEach((file, index) => {
     }
     
     const area = turf.area(feature) // in square meters
+    const area_km = area / 1000000
 
     if (!prefTotals[prefCode]) {
       prefTotals[prefCode] = 0
     }
-    prefTotals[prefCode] += area
+    prefTotals[prefCode] += area_km
 
     if (!cityTotals[code]) {
       cityTotals[code] = 0
     }
-    cityTotals[code] += area
+    cityTotals[code] += area_km
   }
 
 })
