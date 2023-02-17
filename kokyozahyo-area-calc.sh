@@ -34,3 +34,6 @@ sed -i "" "s/$CSV_HEADER//" $CITY_COUNT_FILE
 sed -i "" "/^$/d" $CITY_COUNT_FILE
 find . -name "*_city_kokyozahyo_area.csv" | xargs rm
 sed -i "" "1s/^/$CSV_HEADER\n/" $CITY_COUNT_FILE
+
+rm -f output/*_city_kokyozahyo_area.csv
+rm -f output/*_pref_kokyozahyo_area.csv
