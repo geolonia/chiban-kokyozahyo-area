@@ -11,16 +11,17 @@ const outsideFiles = []
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
-const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
-// const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
+// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
+const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
   
-  progressBar.progressBar(files.indexOf(file), files.length, startTime);
+  // progressBar.progressBar(files.indexOf(file), files.length, startTime);
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
   let is筆InsideCity = false;
+  let unionPolygon = turf.polygon([[[0, 0], [0, 0], [0, 0], [0, 0]]])
 
   // 筆ごとに処理する
   for (const raw of features) {
@@ -34,44 +35,42 @@ for (const file of files) {
     if (!筆feature.properties.地番.match(/^[0-9]/)) {
       continue;
     }
+    unionPolygon = turf.union(unionPolygon, 筆feature)
+  }
 
-    const basename = file.split("/").pop().split(".")[0]
-    const code = updateLatestCityCode(筆feature.properties.市区町村コード)
+  const basename = file.split("/").pop().split(".")[0]
+  const code = updateLatestCityCode(basename.split("-")[0])
 
-    let cityData;
-    // ファイルが存在するかチェックする
-    try {
-      cityData = fs.readFileSync(`./data/admins/${prefCode}/${code}.json`, "utf8");
-    } catch (e) {
-      console.log(`./data/admins/${prefCode}/${code}.json が存在しません`)
-      continue;
-    }
+  let cityData;
+  // ファイルが存在するかチェックする
+  try {
+    cityData = fs.readFileSync(`./data/admins/${prefCode}/${code}.json`, "utf8");
+  } catch (e) {
+    console.log(`./data/admins/${prefCode}/${code}.json が存在しません`)
+    continue;
+  }
 
-    const city = JSON.parse(cityData)
+  const city = JSON.parse(cityData)
 
-    // 市区町村ポリゴンをループする
-    for (const cityFeature of city.features) {
+  // 市区町村ポリゴンをループする
+  for (const cityFeature of city.features) {
 
-      // 筆の凸包を計算しポリゴンを作る
-      const hullPolygon = turf.convex(筆feature)
+    is筆InsideCity = turf.booleanWithin(unionPolygon, cityFeature)
 
-      is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
-
-      if (!is筆InsideCity) {
-        break
-      }
-    }
-    
     if (!is筆InsideCity) {
-      outsideFiles.push([`${basename}.zip`, 筆feature.properties.市区町村名])
-      break;
+      break
     }
+  }
+  
+  if (!is筆InsideCity) {
+    outsideFiles.push([`${basename}.zip`])
+    break;
   }
 }
 
 const csvWriterOutside = createArrayCsvWriter({
   path: `./output/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-  header: ['zip_file', '市区町村名']
+  header: ['zip_file']
 })
 csvWriterOutside.writeRecords(outsideFiles)
 
