@@ -37,7 +37,8 @@ files.forEach((file, index) => {
     }
     
     const area = turf.area(feature) // in square meters
-    const area_km = Math.round(area / 1000000)
+    // 小数点第3位で四捨五入
+    const area_km = Math.round(area / 1000000 * 1000) / 1000
 
     if (!prefTotals[prefCode]) {
       prefTotals[prefCode] = 0
