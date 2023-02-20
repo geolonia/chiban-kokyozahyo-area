@@ -10,8 +10,8 @@ const errorFiles = []
 const args = process.argv.slice(2)
 const prefCode = args[0] // 都道府県コードを第一引数で指定する
 
-// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
-const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
+const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
+// const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
@@ -48,6 +48,10 @@ for (const file of files) {
 
     const 筆feature = JSON.parse(feature)
 
+    if (!筆feature.properties.地番.match(/^[0-9]/)) {
+      continue;
+    }
+
     // 市区町村のポリゴンをループする
     for (const cityFeature of city.features) {
 
@@ -55,7 +59,7 @@ for (const file of files) {
       is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
 
       if (!is筆InsideCity) {
-        outsideFiles.push([`${basename}.zip`])
+        outsideFiles.push([`${basename}.zip`,筆feature.properties.地番])
         break;
       }
     }
@@ -68,7 +72,7 @@ for (const file of files) {
 
 const csvWriterOutside = createArrayCsvWriter({
   path: `./output/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-  header: ['zip_file']
+  header: ['zip_file', 'chiban']
 })
 csvWriterOutside.writeRecords(outsideFiles)
 

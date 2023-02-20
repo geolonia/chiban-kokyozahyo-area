@@ -18,7 +18,7 @@ fi
 
 # *_all_kyokyozahyo_outside_files.csv を結合する
 # ALL_OUTSIDE_FILE=$TARGET_DIR/all_kokyozahyo_outside.csv
-# CSV_HEADER_OUTSIDE="zip_file"
+# CSV_HEADER_OUTSIDE="zip_file,chiban"
 
 # cat $TARGET_DIR/*_all_kyokyozahyo_outside_files.csv > $ALL_OUTSIDE_FILE
 # sed $SED_OPTION "s/$CSV_HEADER_OUTSIDE//" $ALL_OUTSIDE_FILE
