@@ -4,8 +4,6 @@ const fs = require("fs")
 const turf = require("@turf/turf");
 const { createArrayCsvWriter } = require('csv-writer')
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
-const progressBar = require("progress-bar-cli");
-let startTime = new Date();
 const outsideFiles = []
 const errorFiles = []
 
@@ -18,8 +16,6 @@ const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
   
-  progressBar.progressBar(files.indexOf(file), files.length, startTime);
-
   // 市区町村のポリゴンの中に筆があるかチェックする
   const basename = file.split("/").pop().split(".")[0]
   const code = updateLatestCityCode(basename.split("-")[0])
