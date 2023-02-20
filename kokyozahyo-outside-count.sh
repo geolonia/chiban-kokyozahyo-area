@@ -10,11 +10,11 @@ done | parallel
 TARGET_DIR=output
 
 # mac だと $SED_OPTION にする、linux の場合は、-i だけでいい
-SED_OPTION="-i"
+# SED_OPTION="-i"
 
-if [ "$(uname)" == 'Darwin' ]; then
-  SED_OPTION="-i \"\""
-fi
+# if [ "$(uname)" == 'Darwin' ]; then
+#   SED_OPTION="-i \"\""
+# fi
 
 # *_all_kyokyozahyo_outside_files.csv を結合する
 # ALL_OUTSIDE_FILE=$TARGET_DIR/all_kokyozahyo_outside.csv
