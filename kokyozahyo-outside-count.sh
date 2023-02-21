@@ -44,3 +44,7 @@ sed $SED_OPTION "s/$CSV_HEADER_ERROR//" $ALL_ERROR_FILE
 sed $SED_OPTION "/^$/d" $ALL_ERROR_FILE
 find . -name "*_error.csv" | xargs rm
 sed $SED_OPTION "1s/^/$CSV_HEADER_ERROR\n/" $ALL_ERROR_FILE
+
+uniq $ALL_ERROR_FILE > $TARGET_DIR/error-uniq.csv
+rm $ALL_ERROR_FILE
+mv $TARGET_DIR/error-uniq.csv $ALL_ERROR_FILE
