@@ -31,13 +31,11 @@ for (const file of files) {
 
   // 市区町村のGeoJSONを読み込む
   const city = JSON.parse(cityData)
-
   // 筆の ndgeojson ファイルを読み込む
   const raw = fs.readFileSync(file, "utf8");
   const features = raw.split("\n")
 
   let is筆InsideCity;
-
 
   for (const feature of features) {
 
@@ -58,13 +56,15 @@ for (const file of files) {
       const hullPolygon = turf.convex(筆feature)
       is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
 
-      if (!is筆InsideCity) {
-        outsideFiles.push([`${basename}.zip`,筆feature.properties.地番])
+      if (is筆InsideCity) {
+        // 筆は市内にあるので、他の市区町村のポリゴンをチェックする必要はない
         break;
       }
     }
 
     if (!is筆InsideCity) {
+      // "筆は市外にあるので、他のこのファイルの筆をチェックする必要はない"
+      outsideFiles.push([`${basename}.zip`,筆feature.properties.地番])
       break;
     }
   }
