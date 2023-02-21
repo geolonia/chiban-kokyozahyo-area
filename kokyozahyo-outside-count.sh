@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
+# 開始時間を記録
+startDate=$(date "+%Y/%m/%d %H:%M:%S")
+echo "start: ${startDate}" >> log.txt
+
 for i in {1..47}
 do
   num=$(printf "%02d" $i)
@@ -8,6 +12,9 @@ do
 done | parallel
 
 TARGET_DIR=output
+
+endDate=$(date "+%Y/%m/%d %H:%M:%S")
+echo "end: ${endDate}" >> log.txt 
 
 # mac だと $SED_OPTION にする、linux の場合は、-i だけでいい
 # SED_OPTION="-i"
