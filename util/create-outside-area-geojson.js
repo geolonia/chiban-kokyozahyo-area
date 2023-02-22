@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path')
+const readline = require('node:readline');
 const { parse } = require('csv-parse/sync')
 
 const targetPath = path.join(__dirname, '../output/all_kokyozahyo_outside.csv')
@@ -8,8 +9,6 @@ const targetPath = path.join(__dirname, '../output/all_kokyozahyo_outside.csv')
 
 const outputPath = path.join(__dirname, '../output/outside-area.ndgeojson');
 // const outputPath = path.join(__dirname, '../test/outside-area.ndgeojson');
-
-let outsideAreaGeoJson = ''
 
 async function processLineByLine() {
 
