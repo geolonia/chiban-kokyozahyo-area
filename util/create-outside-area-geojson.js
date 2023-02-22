@@ -27,7 +27,7 @@ async function processLineByLine() {
 
   for (const row of csv) {
     const { zip_file } = row
-    console.log(`${index}: ${zip_file}, ${Date.now()}`)
+    console.log(`${index}/${csv.length}: ${zip_file}, ${Date.now()}`)
 
     const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
