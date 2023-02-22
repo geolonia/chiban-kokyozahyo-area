@@ -64,7 +64,7 @@ for (const file of files) {
 
     if (!is筆InsideCity) {
       // "筆は市外にあるので、他のこのファイルの筆をチェックする必要はない"
-      outsideFiles.push([`${basename}.zip`,筆feature.properties.地番])
+      outsideFiles.push([`${basename}.zip`])
       break;
     }
   }
@@ -72,7 +72,7 @@ for (const file of files) {
 
 const csvWriterOutside = createArrayCsvWriter({
   path: `./output/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-  header: ['zip_file', 'chiban']
+  header: ['zip_file']
 })
 csvWriterOutside.writeRecords(outsideFiles)
 
