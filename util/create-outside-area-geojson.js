@@ -10,7 +10,11 @@ const targetPath = path.join(__dirname, '../output/all_kokyozahyo_outside.csv')
 const outputPath = path.join(__dirname, '../output/outside-area.ndgeojson');
 // const outputPath = path.join(__dirname, '../test/outside-area.ndgeojson');
 
+let index = 0;
+
 async function processLineByLine() {
+
+  console.log(`start: ${Date.now()}`);
 
   if (!fs.existsSync(targetPath)) {
     console.error('File not found: ' + targetPath)
@@ -23,6 +27,7 @@ async function processLineByLine() {
 
   for (const row of csv) {
     const { zip_file } = row
+    console.log(`${index}: ${zip_file}, ${Date.now()}`)
 
     const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
@@ -35,12 +40,13 @@ async function processLineByLine() {
     });
 
     for await (const line of rl) {
-      streamWrite.write(line);
+      streamWrite.write(`${line}\n`);
     }
+    index++;
   }
 
   streamWrite.end();
-  console.log('done');
+  console.log(`done: ${Date.now()}`);
 
 }
 
