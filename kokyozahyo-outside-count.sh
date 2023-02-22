@@ -24,8 +24,8 @@ if [ "$(uname)" == 'Darwin' ]; then
 fi
 
 # *_all_kyokyozahyo_outside_files.csv を結合する
-ALL_OUTSIDE_FILE=$TARGET_DIR/all_kokyozahyo_outside.csv
-CSV_HEADER_OUTSIDE="zip_file,chiban"
+ALL_OUTSIDE_FILE=$TARGET_DIR/outside_area_files.csv
+CSV_HEADER_OUTSIDE="zip_file"
 
 cat $TARGET_DIR/*_all_kyokyozahyo_outside_files.csv > $ALL_OUTSIDE_FILE
 sed $SED_OPTION "s/$CSV_HEADER_OUTSIDE//" $ALL_OUTSIDE_FILE
