@@ -4,7 +4,7 @@ const path = require('path')
 const readline = require('node:readline');
 const { parse } = require('csv-parse/sync')
 
-const targetPath = path.join(__dirname, '../output/all_kokyozahyo_outside.csv')
+const targetPath = path.join(__dirname, '../output/outside_area_files.csv')
 // const targetPath = path.join(__dirname, '../test/all_kokyozahyo_outside.csv')
 
 const outputPath = path.join(__dirname, '../output/outside-area.ndgeojson');
