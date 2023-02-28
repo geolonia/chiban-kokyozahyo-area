@@ -18,9 +18,9 @@ sed -i -e '1d' $NDGEOJSON_LIST
 sed -i "s/^/\.\.\/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
-cat $NDGEOJSON_LIST -v | parallel -0 -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
-cat $NDGEOJSON_LIST -v | parallel -0 -j 16 --line-buffer ./xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
-cat $NDGEOJSON_LIST -v | parallel -0 -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
+cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
+cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer ./xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
+cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
 
 mkdir -p $(pwd)/tmp
 tippecanoe \
