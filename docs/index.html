@@ -39,7 +39,7 @@
 
       map.addSource('outside-area', {
         type: 'vector',
-        url: 'https://tileserver.geolonia.com/outside-area-files/tiles.json?key=YOUR-API-KEY'
+        url: 'https://tileserver.geolonia.com/outside-area-files2/tiles.json?key=YOUR-API-KEY'
       });
 
       map.addSource('chiban-cities', {
@@ -66,8 +66,17 @@
         'source-layer': 'outside-area',
         paint: {
           'fill-color': '#ff0000',
-          'fill-opacity': 0.5
+          'fill-opacity': 0.5,
+          'fill-outline-color': '#ffffff'
         }
+      });
+
+      // popupでクリックした地点のデータを表示する
+      map.on('click', 'outside-area', (e) => {
+        const popup = new geolonia.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(JSON.stringify(e.features[0].properties))
+          .addTo(map);
       });
 
     })
