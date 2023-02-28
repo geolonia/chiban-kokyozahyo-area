@@ -31,7 +31,6 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Install dependencies
         run: |
-          mkdir docs
           mv README.md ./docs/README.md
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
