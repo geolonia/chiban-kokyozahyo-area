@@ -15,7 +15,7 @@ echo "start $(date +%s)"
 # csvファイルのヘッダーを削除
 sed -i -e '1d' $NDGEOJSON_LIST
 
-sed -i "s/^/\.\.\/\.\.\/all_zips\//" $NDGEOJSON_LIST
+sed -i "s/^/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
 cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
