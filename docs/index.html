@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,17 +17,10 @@
     }
   </style>
 </head>
+
 <body>
 
-  <div
-    id="map"
-    class="left"
-    data-zoom="5"
-    data-lat="37.01"
-    data-lng="138.09"
-    data-hash="on"
-    data-marker="off"
-  ></div>
+  <div id="map" class="left" data-zoom="5" data-lat="37.01" data-lng="138.09" data-hash="on" data-marker="off"></div>
 
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
@@ -39,7 +33,7 @@
 
       map.addSource('outside-area', {
         type: 'vector',
-        url: 'https://tileserver.geolonia.com/outside-area-files2/tiles.json?key=YOUR-API-KEY'
+        url: 'https://tileserver.geolonia.com/outside_area_files3/tiles.json?key=YOUR-API-KEY'
       });
 
       map.addSource('chiban-cities', {
@@ -59,25 +53,136 @@
         }
       });
 
-      map.addLayer({
-        id: 'outside-area',
-        type: 'fill',
-        source: 'outside-area',
-        'source-layer': 'outside-area',
-        paint: {
-          'fill-color': '#ff0000',
-          'fill-opacity': 0.5,
-          'fill-outline-color': '#ffffff'
-        }
-      });
+      // map.addLayer({
+      //   id: 'outside-area',
+      //   type: 'fill',
+      //   source: 'outside-area',
+      //   'source-layer': 'outside-area',
+      //   paint: {
+      //     'fill-color': '#ff0000',
+      //     'fill-opacity': 0.5,
+      //     'fill-outline-color': '#ffffff'
+      //   }
+      // });
 
       // popupでクリックした地点のデータを表示する
-      map.on('click', 'outside-area', (e) => {
+      map.on('click', 'outside-area/polygonFill', (e) => {
         const popup = new geolonia.Popup()
           .setLngLat(e.lngLat)
           .setHTML(JSON.stringify(e.features[0].properties))
           .addTo(map);
       });
+
+      map.addLayer({
+        id: 'outside-area/pointHeatmap',
+        type: 'heatmap',
+        source: 'outside-area',
+        'source-layer': 'outside-area',
+        maxzoom: 12,
+        filter: ["==", "$type", "Point"],
+        paint: {
+          // Increase the heatmap weight based on frequency and property magnitude
+          'heatmap-weight': [
+            'interpolate',
+            ['linear'],
+            ['get', 'sqrt_point_count'],
+            0,
+            0,
+            100,
+            1
+          ],
+          // Increase the heatmap color weight weight by zoom level
+          // heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0,
+            1,
+            9,
+            3
+          ],
+          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+          // Begin color ramp at 0-stop with a 0-transparancy color
+          // to create a blur-like effect.
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0,
+            'rgba(33,102,172,0)',
+            0.2,
+            'rgb(103,169,207)',
+            0.4,
+            'rgb(209,229,240)',
+            0.6,
+            'rgb(253,219,199)',
+            0.8,
+            'rgb(239,138,98)',
+            1,
+            'rgb(178,24,43)'
+          ],
+          // Adjust the heatmap radius by zoom level
+          'heatmap-radius': [
+            'interpolate',
+            ['linear'],
+            ['get', 'point_count'],
+            0,
+            2,
+            100,
+            30
+          ],
+        }
+      });
+
+      map.addLayer({
+        id: 'outside-area/polygonFill',
+        type: 'fill',
+        source: 'outside-area',
+        'source-layer': 'outside-area',
+        minzoom: 12,
+        filter: ["==", "$type", "Polygon"],
+        paint: {
+          'fill-color': 'rgba(255,0,0,0.3)'
+        }
+      });
+
+      map.addLayer({
+        id: 'outside-area/polygonBorder',
+        type: 'line',
+        source: 'outside-area',
+        'source-layer': 'outside-area',
+        minzoom: 12,
+        filter: ["==", "$type", "Polygon"],
+        paint: {
+          'line-color': 'rgba(255,0,0,0.5)'
+        }
+      });
+
+      map.addLayer({
+        id: 'outside-area/polygonName',
+        type: 'symbol',
+        source: 'outside-area',
+        'source-layer': 'outside-area',
+        minzoom: 16,
+        filter: ["==", "$type", "Polygon"],
+        paint: {
+          'text-color': '#ffffff'
+        },
+        layout: {
+          'text-field': '{地番}',
+          'text-font': ['Noto Sans Regular'],
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            16,
+            10,
+            19,
+            16,
+          ]
+        }
+      })
 
     })
   </script>
