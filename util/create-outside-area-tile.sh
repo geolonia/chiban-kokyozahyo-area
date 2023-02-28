@@ -7,7 +7,7 @@ BASE_DIR=$(cd ${SCRIPT_DIR}/..; pwd)
 
 INPUT_FILE="${BASE_DIR}/output/outside-area.ndgeojson"
 OUTPUT_FILE="${BASE_DIR}/outside-area-files.mbtiles"
-NDGEOJSON_LIST="${BASE_DIR}/output/outside-area-files.csv"
+NDGEOJSON_LIST="${BASE_DIR}/output/outside_area_files.csv"
 
 # unix time を出力
 echo "start $(date +%s)"
