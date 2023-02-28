@@ -56,6 +56,6 @@ tippecanoe \
   -t $(pwd)/tmp \
   -l outside-area ./all_polygons.ndgeojson
 
-# tile-join -pk -f -o $OUTPUT_FILE ./all_points.mbtiles ./xml_polygons.mbtiles ./all_polygons.mbtiles
+tile-join -pk -f -o $OUTPUT_FILE ./all_points.mbtiles ./xml_polygons.mbtiles ./all_polygons.mbtiles
 
 echo "end $(date +%s)"
