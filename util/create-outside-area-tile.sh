@@ -5,8 +5,8 @@ set -e
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
 BASE_DIR=$(cd ${SCRIPT_DIR}/..; pwd)
 
-INPUT_FILE="${BASE_DIR}/output/outside-area.ndgeojson"
-OUTPUT_FILE="${BASE_DIR}/outside-area-files.mbtiles"
+INPUT_FILE="${BASE_DIR}/output/outside_area.ndgeojson"
+OUTPUT_FILE="${BASE_DIR}/outside_area_files.mbtiles"
 NDGEOJSON_LIST="${BASE_DIR}/output/outside_area_files.csv"
 
 # unix time を出力

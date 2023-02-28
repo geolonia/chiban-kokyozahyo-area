@@ -7,8 +7,8 @@ const { parse } = require('csv-parse/sync')
 const targetPath = path.join(__dirname, '../output/outside_area_files.csv')
 // const targetPath = path.join(__dirname, '../test/all_kokyozahyo_outside.csv')
 
-const outputPath = path.join(__dirname, '../output/outside-area.ndgeojson');
-// const outputPath = path.join(__dirname, '../test/outside-area.ndgeojson');
+const outputPath = path.join(__dirname, '../output/outside_area.ndgeojson');
+// const outputPath = path.join(__dirname, '../test/outside_area.ndgeojson');
 
 let index = 0;
 
