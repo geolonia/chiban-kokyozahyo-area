@@ -18,8 +18,8 @@ sed -i -e '1d' $NDGEOJSON_LIST
 sed -i "s/^/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
-cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer $SCRIPT_DIR/xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
 cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
+cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer $SCRIPT_DIR/xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
 cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
 
 mkdir -p $(pwd)/tmp
@@ -41,15 +41,15 @@ tippecanoe \
   --read-parallel \
   -f -o xml_polygons.mbtiles \
   -t $(pwd)/tmp \
-  -l outside-area ./xml_polygons.ndgeojson
+  -l represent-point ./xml_polygons.ndgeojson
 
-# ポリゴンは z14 - z15 まで
+# ポリゴンは z12 - z15 まで
 tippecanoe \
-  -z15 -B15 -Z14 \
+  -z15 -B15 -Z12 \
   -pk \
   --drop-smallest-as-needed --drop-fraction-as-needed \
   -pS \
-  --full-detail=14 \
+  --full-detail=12 \
   --detect-shared-borders \
   --read-parallel \
   -f -o all_polygons.mbtiles \

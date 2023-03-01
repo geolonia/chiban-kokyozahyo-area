@@ -64,13 +64,13 @@
       //   }
       // });
 
-      // // popupでクリックした地点のデータを表示する
-      // map.on('click', 'outside-area/polygonFill', (e) => {
-      //   const popup = new geolonia.Popup()
-      //     .setLngLat(e.lngLat)
-      //     .setHTML(JSON.stringify(e.features[0].properties))
-      //     .addTo(map);
-      // });
+      // popupでクリックした地点のデータを表示する
+      map.on('click', 'outside-area/polygonFill', (e) => {
+        const popup = new geolonia.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(JSON.stringify(e.features[0].properties))
+          .addTo(map);
+      });
 
       map.addLayer({
         id: 'outside-area/pointHeatmap',
@@ -159,30 +159,30 @@
       //   }
       // });
 
-      // map.addLayer({
-      //   id: 'outside-area/polygonName',
-      //   type: 'symbol',
-      //   source: 'outside-area',
-      //   'source-layer': 'outside-area',
-      //   minzoom: 16,
-      //   filter: ["==", "$type", "Polygon"],
-      //   paint: {
-      //     'text-color': '#ffffff'
-      //   },
-      //   layout: {
-      //     'text-field': '{地番}',
-      //     'text-font': ['Noto Sans Regular'],
-      //     'text-size': [
-      //       'interpolate',
-      //       ['linear'],
-      //       ['zoom'],
-      //       16,
-      //       10,
-      //       19,
-      //       16,
-      //     ]
-      //   }
-      // })
+      map.addLayer({
+        id: 'outside-area/polygonName',
+        type: 'symbol',
+        source: 'outside-area',
+        'source-layer': 'outside-area',
+        minzoom: 12,
+        filter: ["==", "$type", "Polygon"],
+        paint: {
+          'text-color': '#ffffff'
+        },
+        layout: {
+          'text-field': '{地番}',
+          'text-font': ['Noto Sans Regular'],
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            16,
+            10,
+            19,
+            16,
+          ]
+        }
+      })
 
       map.addLayer({
         id: 'admins/line',
