@@ -41,26 +41,14 @@
         url: 'https://tileserver.geolonia.com/chiban-cities/tiles.json?key=YOUR-API-KEY'
       })
 
-      map.addLayer({
-        id: 'admins/polygon',
-        type: 'fill',
-        source: 'chiban-cities',
-        'source-layer': 'admins',
-        paint: {
-          'fill-color': '#ffffff',
-          'fill-opacity': 0.5,
-        }
-      });
-
       // map.addLayer({
-      //   id: 'outside-area',
+      //   id: 'admins/polygon',
       //   type: 'fill',
-      //   source: 'outside-area',
-      //   'source-layer': 'outside-area',
+      //   source: 'chiban-cities',
+      //   'source-layer': 'admins',
       //   paint: {
-      //     'fill-color': '#ff0000',
+      //     'fill-color': '#ffffff',
       //     'fill-opacity': 0.5,
-      //     'fill-outline-color': '#ffffff'
       //   }
       // });
 
@@ -142,47 +130,60 @@
         minzoom: 12,
         filter: ["==", "$type", "Polygon"],
         paint: {
-          'fill-color': '#BDA77E',
-          'fill-opacity': 0.5,
+          'fill-color': '#0000ff',
+          'fill-opacity': 0.2,
         }
       });
 
-      // map.addLayer({
-      //   id: 'outside-area/polygonBorder',
-      //   type: 'line',
-      //   source: 'outside-area',
-      //   'source-layer': 'outside-area',
-      //   minzoom: 12,
-      //   filter: ["==", "$type", "Polygon"],
-      //   paint: {
-      //     'line-color': 'rgba(255,0,0,0.5)'
-      //   }
-      // });
-
       map.addLayer({
-        id: 'outside-area/polygonName',
-        type: 'symbol',
+        id: 'outside-area/polygonBorder',
+        type: 'line',
         source: 'outside-area',
         'source-layer': 'outside-area',
         minzoom: 12,
         filter: ["==", "$type", "Polygon"],
         paint: {
-          'text-color': '#ffffff'
-        },
-        layout: {
-          'text-field': '{地番}',
-          'text-font': ['Noto Sans Regular'],
-          'text-size': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            16,
-            10,
-            19,
-            16,
-          ]
+          'line-color': '#0000ff',
+          'line-opacity': 0.2,
         }
-      })
+      });
+
+      // map.addLayer({
+      //   id: 'outside-area/polygonName',
+      //   type: 'symbol',
+      //   source: 'outside-area',
+      //   'source-layer': 'outside-area',
+      //   minzoom: 12,
+      //   filter: ["==", "$type", "Polygon"],
+      //   paint: {
+      //     'text-color': '#ffffff'
+      //   },
+      //   layout: {
+      //     'text-field': '{地番}',
+      //     'text-font': ['Noto Sans Regular'],
+      //     'text-size': [
+      //       'interpolate',
+      //       ['linear'],
+      //       ['zoom'],
+      //       16,
+      //       10,
+      //       19,
+      //       16,
+      //     ]
+      //   }
+      // })
+
+      map.addLayer({
+        id: 'admins/line-gap',
+        type: 'line',
+        source: 'chiban-cities',
+        'source-layer': 'admins',
+        minzoom: 12,
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': 5,
+        }
+      });
 
       map.addLayer({
         id: 'admins/line',
@@ -193,7 +194,7 @@
         paint: {
           'line-color': '#ff0000',
           'line-width': 3,
-          'line-dasharray': [5, 5]
+          // 'line-dasharray': [5, 5],
         }
       });
     })
