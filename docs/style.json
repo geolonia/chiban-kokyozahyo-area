@@ -7366,11 +7366,12 @@
       }
     },
     {
-      "id": "outside-area/polygonName",
+      "id": "outside-area/polygonNameCity",
       "type": "symbol",
       "source": "outside-area",
       "source-layer": "outside-area",
       "minzoom": 12,
+      "maxzoom": 18,
       "filter": [
         "==",
         "$type",
@@ -7388,6 +7389,43 @@
           "Noto Sans CJK JP Bold"
         ],
         "text-padding": 50,
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          16,
+          10,
+          19,
+          16
+        ]
+      }
+    },
+    {
+      "id": "outside-area/polygonName",
+      "type": "symbol",
+      "source": "outside-area",
+      "source-layer": "outside-area",
+      "minzoom": 18,
+      "filter": [
+        "==",
+        "$type",
+        "Polygon"
+      ],
+      "paint": {
+        "text-color": "#0000ff",
+        "text-halo-width": 2,
+        "text-halo-color": "#ffffff",
+        "text-halo-blur": 0.5
+      },
+      "layout": {
+        "text-field": "{市区町村名}{地番}",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-size": [
           "interpolate",
           [
