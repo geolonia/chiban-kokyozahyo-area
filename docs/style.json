@@ -6855,7 +6855,7 @@
         "text-halo-blur": 0.5
       },
       "layout": {
-        "text-field": "{市区町村名}",
+        "text-field": "{市区町村名}{大字名}",
         "text-font": [
           "Noto Sans CJK JP Bold"
         ],
@@ -6893,7 +6893,7 @@
         "text-halo-blur": 0.5
       },
       "layout": {
-        "text-field": "{市区町村名}{地番}",
+        "text-field": "{市区町村名}{大字名}{地番}",
         "text-font": [
           "Noto Sans Regular"
         ],
