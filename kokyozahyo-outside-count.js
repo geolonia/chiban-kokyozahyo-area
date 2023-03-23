@@ -39,6 +39,8 @@ for (const file of files) {
   const 筆features = [];
   let is筆InsideCity;
 
+  console.log(stringFeatures)
+
   for (const feature of stringFeatures) {
     if (feature === "" ) {
       continue;
