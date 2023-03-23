@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -ex
-うう
+
 # 開始時間を記録
 startDate=$(date "+%Y/%m/%d %H:%M:%S")
 echo "start: ${startDate}" >> log.txt
