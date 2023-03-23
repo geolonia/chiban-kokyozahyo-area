@@ -58,6 +58,10 @@ for (const file of files) {
   console.log(hullPolygon)
   const hullPolygonArea = turf.area(hullPolygon)
 
+  if (hullPolygon === null) {
+    break
+  }
+
   // 市区町村のポリゴンをループする
   for (const cityFeature of city.features) {
 
