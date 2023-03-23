@@ -54,6 +54,7 @@ for (const file of files) {
   }
 
   const hullPolygon = turf.convex(turf.featureCollection(筆features))
+  console.log(hullPolygon)
   const hullPolygonArea = turf.area(hullPolygon)
 
   // 市区町村のポリゴンをループする
