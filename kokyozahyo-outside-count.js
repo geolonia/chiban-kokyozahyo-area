@@ -53,6 +53,7 @@ for (const file of files) {
     筆features.push(筆feature)
   }
 
+  console.log(筆features)
   const hullPolygon = turf.convex(turf.featureCollection(筆features))
   console.log(hullPolygon)
   const hullPolygonArea = turf.area(hullPolygon)
