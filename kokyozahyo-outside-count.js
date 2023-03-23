@@ -39,8 +39,6 @@ for (const file of files) {
   const 筆features = [];
   let is筆InsideCity;
 
-  console.log(stringFeatures)
-
   for (const feature of stringFeatures) {
     if (feature === "" ) {
       continue;
@@ -55,14 +53,12 @@ for (const file of files) {
     筆features.push(筆feature)
   }
 
-  console.log(筆features)
-  const hullPolygon = turf.convex(turf.featureCollection(筆features))
-  console.log(hullPolygon)
-  const hullPolygonArea = turf.area(hullPolygon)
-
-  if (hullPolygon === null) {
-    break
+  if (筆features.length === 0) {
+    continue;
   }
+
+  const hullPolygon = turf.convex(turf.featureCollection(筆features))
+  const hullPolygonArea = turf.area(hullPolygon)
 
   // 市区町村のポリゴンをループする
   for (const cityFeature of city.features) {
