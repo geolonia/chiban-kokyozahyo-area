@@ -8,11 +8,11 @@ const outsideFiles = []
 const errorFiles = []
 
 const args = process.argv.slice(2)
-// const prefCode = args[0] // 都道府県コードを第一引数で指定する
-const prefCode = "28" // 都道府県コードを第一引数で指定する
+const prefCode = args[0] // 都道府県コードを第一引数で指定する
+// const prefCode = "28" // 都道府県コードを第一引数で指定する
 
-// const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
-const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
+const files = glob.sync(`../all_zips/${prefCode}*.ndgeojson`);
+// const files = glob.sync(`./test/${prefCode}*.ndgeojson`);
 
 // 地番住所の ndgeojson ファイルを読み込む
 for (const file of files) {
@@ -60,6 +60,9 @@ for (const file of files) {
   for (const cityFeature of city.features) {
 
     const insideCityPolygon = turf.intersect(hullPolygon, cityFeature);
+    if (insideCityPolygon === null) {
+      continue;
+    }
     const insideCityPolygonArea = turf.area(insideCityPolygon)
     const insideCityRatio = insideCityPolygonArea / hullPolygonArea
 
