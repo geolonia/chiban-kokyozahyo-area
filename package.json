@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-outside-area-tile": "node util/create-outside-area-geojson.js && bash util/create-outside-area-tile.sh"
   },
   "author": "",
   "license": "ISC",
