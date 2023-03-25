@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create-outside-area-tile": "node util/create-outside-area-geojson.js && bash util/create-outside-area-tile.sh"
+    "create-outside-area-tile": "node util/create-outside-area-geojson.js && chmod +x util/create-outside-area-tile.sh && bash util/create-outside-area-tile.sh"
   },
   "author": "",
   "license": "ISC",
