@@ -59,3 +59,6 @@ tippecanoe \
 tile-join -pk -f -o $OUTPUT_FILE ./all_points.mbtiles ./xml_polygons.mbtiles ./all_polygons.mbtiles
 
 echo "end $(date +%s)"
+
+# 作成したタイルを s3 にアップロード
+# scp $BASE_DIR/outside_area_files2.mbtiles ubuntu@54.199.59.169:/mnt/efs/mbtiles/
