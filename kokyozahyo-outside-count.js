@@ -15,7 +15,9 @@ const ndgeojsonDir = `./test`
 // const outputDir = `./output`
 const outputDir = `./test`
 
-const getCityData = (code, prefCode) => {
+const getCityData = (code) => {
+
+  const prefCode = code.slice(0, 2)
 
   let cityData;
   let error;
@@ -57,7 +59,7 @@ const get筆Features = (file) => {
   return 筆features
 }
 
-const inspectOutside筆ByHullPolygon = (prefCode) => {
+const inspectOutside筆ByHullPolygon = (prefCode, ndgeojsonDir) => {
 
   const outsideNdGeoJsons = []
   const errorFiles = []
@@ -71,7 +73,7 @@ const inspectOutside筆ByHullPolygon = (prefCode) => {
     const basename = file.split("/").pop().split(".")[0]
     const code = updateLatestCityCode(basename.split("-")[0])
 
-    const { cityData, error, errorMessage } = getCityData(code, prefCode)
+    const { cityData, error, errorMessage } = getCityData(code)
 
     if (error) {
       errorFiles.push(errorMessage)
@@ -185,10 +187,8 @@ const inspectOutside筆ByRealPolygon = (prefCode, outsideNdGeoJsons) => {
   return { outsideFiles, errorFiles }
 }
 
-const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon(prefCode);
+const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon(prefCode, ndgeojsonDir);
 const { outsideFiles } = inspectOutside筆ByRealPolygon(prefCode, outsideNdGeoJsons);
-
-console.log(outsideFiles)
 
 // const csvWriterOutside = createArrayCsvWriter({
 //   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
@@ -202,3 +202,11 @@ console.log(outsideFiles)
 //   header: ['error_city_code_from_xml_not_found_in_admins']
 // })
 // errorPref.writeRecords(errorFiles)
+
+
+module.exports = {
+  getCityData,
+  get筆Features,
+  inspectOutside筆ByHullPolygon,
+  inspectOutside筆ByRealPolygon
+};

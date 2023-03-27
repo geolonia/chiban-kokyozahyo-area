@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "create-outside-area-tile": "node util/create-outside-area-geojson.js && chmod +x util/create-outside-area-tile.sh && bash util/create-outside-area-tile.sh"
   },
   "author": "",
@@ -15,5 +15,8 @@
     "csv-writer": "^1.6.0",
     "glob": "^8.1.0",
     "progress-bar-cli": "^1.0.4"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }
