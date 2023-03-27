@@ -33,3 +33,11 @@ describe('inspectOutside筆ByHullPolygon', () => {
     expect(outsideNdGeoJsons).toContain("__tests__/data/28111-1403-120.ndgeojson")
   });
 });
+
+describe('inspectOutside筆ByRealPolygon', () => {
+  test('外れた筆のファイル名が含まれたリストを返すこと', () => {
+    const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon("28", "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByRealPolygon("28", outsideNdGeoJsons)
+    expect(outsideFiles).toContain("28111-1403-120.zip")
+  });
+});
