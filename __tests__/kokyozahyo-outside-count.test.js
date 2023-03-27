@@ -29,14 +29,16 @@ describe('get筆Features', () => {
 
 describe('is筆InsideCity', () => {
 
+  // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#16.37/36.008734/139.824596
   test('完全に市区町村外の筆をテスト', () => {
     const { outsideNdGeoJsons } = is筆InsideCity("07", "__tests__/data")
     expect(outsideNdGeoJsons).toContain("__tests__/data/07201-3800-546.ndgeojson")
   });
 
+  // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#14.25/36.00766/139.8019
   test('完全に市区町村内の筆をテスト', () => {
     const { outsideNdGeoJsons } = is筆InsideCity("07", "__tests__/data")
-    expect(outsideNdGeoJsons).not.toContain("__tests__/data/07201-3800-613.ndgeojson")
+    expect(outsideNdGeoJsons).not.toContain("__tests__/data/11214-0315-118.ndgeojson")
   });
 
   // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude#14.67/36.0241/139.78381
@@ -59,14 +61,24 @@ describe('inspectOutside筆ByAreaRate', () => {
     const prefCode = "07"
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
-    expect(outsideFiles).not.toContain("07201-3800-613.zip")
+    expect(outsideFiles).not.toContain("11214-0315-118.zip")
   });
 
+  // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#15.96/36.052106/139.720922
+  test('市区町村と重なっている筆の内、市区町村外の面積が5%以上の筆をテスト', () => {
+    const prefCode = "11"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+    expect(outsideFiles).toContain("11464-0315-77.zip")
+  });
 
-  //TODO:以下のテストを書く
+  // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#16.42/35.992103/139.573547
+  test('市区町村と重なっている筆の内、市区町村外の箇所が5%未満の筆をテスト', () => {
+    const prefCode = "11"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+    expect(outsideFiles).not.toContain("11219-0310-117.zip")
+  });
 
-  // 市区町村と重なっている筆の内、市区町村外の箇所が5%以上の筆をテスト
-
-  // 市区町村と重なっている筆の内、市区町村外の箇所が5%未満の筆をテスト
 
 });

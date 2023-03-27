@@ -135,41 +135,37 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
 
     // 筆の ndgeojson ファイルを読み込む
     const 筆features = get筆Features(file);
+    const combine筆FeatureCollection = turf.combine(turf.featureCollection(筆features))
+    const combine筆Feature = combine筆FeatureCollection.features[0]
+    const combine筆featureArea = turf.area(combine筆Feature)
 
     let is筆InsideCity;
-    for (const 筆feature of 筆features) {
 
-      const 筆featureArea = turf.area(筆feature)
+    for (const cityFeature of cityData.features) {
 
-      // 筆が市区町村の中にあるかチェックする
-      for (const cityFeature of cityData.features) {
+      const insideCityPolygon = turf.intersect(combine筆Feature, cityFeature);
 
-        const insideCityPolygon = turf.intersect(筆feature, cityFeature);
+      // 筆のポリゴンが、市区町村外の場合
+      if (insideCityPolygon === null) {
+        is筆InsideCity = false;
 
-        // 筆のポリゴンが、市区町村外の場合
-        if (insideCityPolygon === null) {
-          is筆InsideCity = false;
-          continue;
+      // 筆のポリゴンが市区町村と重なっている場合
+      } else {
 
-          // 筆のポリゴンが市区町村と重なっている場合
+        const insideCityPolygonArea = turf.area(insideCityPolygon)
+        const insideCityRatio = insideCityPolygonArea / combine筆featureArea
+
+        if (insideCityRatio > 0.95) {
+          is筆InsideCity = true;
+          break;
         } else {
-
-          const insideCityPolygonArea = turf.area(insideCityPolygon)
-          const insideCityRatio = insideCityPolygonArea / 筆featureArea
-
-          if (insideCityRatio > 0.95) {
-            is筆InsideCity = true;
-            break;
-          } else {
-            is筆InsideCity = false;
-          }
+          is筆InsideCity = false;
         }
       }
+    }
 
-      if (!is筆InsideCity) {
-        outsideFiles.push(`${basename}.zip`)
-        break;
-      }
+    if (!is筆InsideCity) {
+      outsideFiles.push(`${basename}.zip`)
     }
   }
 
