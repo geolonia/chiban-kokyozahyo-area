@@ -2,8 +2,8 @@ const fs = require('fs');
 const { 
   getCityData,
   get筆Features,
-  inspectOutside筆ByHullPolygon,
-  inspectOutside筆ByRealPolygon
+  is筆InsideCity,
+  inspectOutside筆ByAreaRate
 } = require('../kokyozahyo-outside-count'); // your_functions_file.js は実際のファイル名に置き換えてください。
 
 describe('getCityData', () => {
@@ -27,36 +27,46 @@ describe('get筆Features', () => {
   });
 });
 
-describe('inspectOutside筆ByHullPolygon', () => {
+describe('is筆InsideCity', () => {
 
-  // 市区町村外の筆をテスト
+  test('完全に市区町村外の筆をテスト', () => {
+    const { outsideNdGeoJsons } = is筆InsideCity("07", "__tests__/data")
+    expect(outsideNdGeoJsons).toContain("__tests__/data/07201-3800-546.ndgeojson")
+  });
 
-  // 市区町村内の筆をテスト
+  test('完全に市区町村内の筆をテスト', () => {
+    const { outsideNdGeoJsons } = is筆InsideCity("07", "__tests__/data")
+    expect(outsideNdGeoJsons).not.toContain("__tests__/data/07201-3800-613.ndgeojson")
+  });
 
-  // 市区町村と重なっている筆の内、座標が正しいけれど一部が市区町村外の筆をテスト
-
-  // 市区町村と重なっている筆の内、座標が正しくない筆をテスト
-
-  
-  test('外れた筆のファイル名が含まれたリストを返すこと', () => {
-    const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon("28", "__tests__/data")
-    expect(outsideNdGeoJsons).toContain("__tests__/data/28111-1403-120.ndgeojson")
+  // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude#14.67/36.0241/139.78381
+  test('市区町村外の筆をテスト', () => {
+    const { outsideNdGeoJsons } = is筆InsideCity("11", "__tests__/data")
+    expect(outsideNdGeoJsons).not.toContain("__tests__/data/11214-0315-96.ndgeojson")
   });
 });
 
-describe('inspectOutside筆ByRealPolygon', () => {
+describe('inspectOutside筆ByAreaRate', () => {
 
-  // 市区町村外の筆をテスト
-
-  // 市区町村内の筆をテスト
-
-  // 市区町村と重なっている筆の内、座標が正しいけれど一部が市区町村外の筆をテスト
-
-  // 市区町村と重なっている筆の内、座標が正しくない筆をテスト
-
-  test('外れた筆のファイル名が含まれたリストを返すこと', () => {
-    const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon("28", "__tests__/data")
-    const { outsideFiles } = inspectOutside筆ByRealPolygon("28", outsideNdGeoJsons)
-    expect(outsideFiles).toContain("28111-1403-120.zip")
+  test('完全に市区町村外の筆をテスト', () => {
+    const prefCode = "07"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+    expect(outsideFiles).toContain("07201-3800-546.zip")
   });
+
+  test('完全に市区町村内の筆をテスト', () => {
+    const prefCode = "07"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+    expect(outsideFiles).not.toContain("07201-3800-613.zip")
+  });
+
+
+  //TODO:以下のテストを書く
+
+  // 市区町村と重なっている筆の内、市区町村外の箇所が5%以上の筆をテスト
+
+  // 市区町村と重なっている筆の内、市区町村外の箇所が5%未満の筆をテスト
+
 });

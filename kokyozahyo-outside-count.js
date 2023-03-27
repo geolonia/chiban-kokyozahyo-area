@@ -59,7 +59,7 @@ const get筆Features = (file) => {
   return 筆features
 }
 
-const inspectOutside筆ByHullPolygon = (prefCode, ndgeojsonDir) => {
+const is筆InsideCity = (prefCode, ndgeojsonDir) => {
 
   const outsideNdGeoJsons = []
   const errorFiles = []
@@ -88,44 +88,33 @@ const inspectOutside筆ByHullPolygon = (prefCode, ndgeojsonDir) => {
     }
 
     let is筆InsideCity;
-    const hullPolygon = turf.convex(turf.featureCollection(筆features))
-    const hullPolygonArea = turf.area(hullPolygon)
 
-    // 市区町村のポリゴンをループする
-    for (const cityFeature of cityData.features) {
+    for (const 筆feature of 筆features) {
 
-      const insideCityPolygon = turf.intersect(hullPolygon, cityFeature);
-
-      // 筆のポリゴンが、市区町村外の場合
-      if (insideCityPolygon === null) {
-        is筆InsideCity = false;
-        continue;
-
-        // 筆のポリゴンが市区町村と重なっている場合
-      } else {
-
-        const insideCityPolygonArea = turf.area(insideCityPolygon)
-        const insideCityRatio = insideCityPolygonArea / hullPolygonArea
-
-        // 外に出ている面積が 5% 未満なら、市区町村の中に筆があると判断する
-        if (insideCityRatio > 0.95) {
-          is筆InsideCity = true;
+      // 市区町村のポリゴンをループする
+      for (const cityFeature of cityData.features) {
+  
+        const hullPolygon = turf.convex(筆feature)
+        is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
+  
+        if (is筆InsideCity) {
+          // 筆は市内にあるので、他の市区町村のポリゴンをチェックする必要はない
           break;
-        } else {
-          is筆InsideCity = false;
         }
       }
-    }
-
-    if (!is筆InsideCity) {
-      outsideNdGeoJsons.push(file)
+  
+      if (!is筆InsideCity) {
+        // "筆は市外にあるので、他のこのファイルの筆をチェックする必要はない"
+        outsideNdGeoJsons.push(file)
+        break;
+      }
     }
   }
 
   return {outsideNdGeoJsons};
 }
 
-const inspectOutside筆ByRealPolygon = (prefCode, outsideNdGeoJsons) => {
+const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
 
   const outsideFiles = []
   const errorFiles = [];
@@ -187,8 +176,8 @@ const inspectOutside筆ByRealPolygon = (prefCode, outsideNdGeoJsons) => {
   return { outsideFiles, errorFiles }
 }
 
-const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon(prefCode, ndgeojsonDir);
-const { outsideFiles } = inspectOutside筆ByRealPolygon(prefCode, outsideNdGeoJsons);
+const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
+const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
 
 // const csvWriterOutside = createArrayCsvWriter({
 //   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
@@ -207,6 +196,6 @@ const { outsideFiles } = inspectOutside筆ByRealPolygon(prefCode, outsideNdGeoJs
 module.exports = {
   getCityData,
   get筆Features,
-  inspectOutside筆ByHullPolygon,
-  inspectOutside筆ByRealPolygon
+  is筆InsideCity,
+  inspectOutside筆ByAreaRate
 };
