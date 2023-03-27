@@ -28,6 +28,16 @@ describe('get筆Features', () => {
 });
 
 describe('inspectOutside筆ByHullPolygon', () => {
+
+  // 市区町村外の筆をテスト
+
+  // 市区町村内の筆をテスト
+
+  // 市区町村と重なっている筆の内、座標が正しいけれど一部が市区町村外の筆をテスト
+
+  // 市区町村と重なっている筆の内、座標が正しくない筆をテスト
+
+  
   test('外れた筆のファイル名が含まれたリストを返すこと', () => {
     const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon("28", "__tests__/data")
     expect(outsideNdGeoJsons).toContain("__tests__/data/28111-1403-120.ndgeojson")
@@ -35,6 +45,15 @@ describe('inspectOutside筆ByHullPolygon', () => {
 });
 
 describe('inspectOutside筆ByRealPolygon', () => {
+
+  // 市区町村外の筆をテスト
+
+  // 市区町村内の筆をテスト
+
+  // 市区町村と重なっている筆の内、座標が正しいけれど一部が市区町村外の筆をテスト
+
+  // 市区町村と重なっている筆の内、座標が正しくない筆をテスト
+
   test('外れた筆のファイル名が含まれたリストを返すこと', () => {
     const { outsideNdGeoJsons } = inspectOutside筆ByHullPolygon("28", "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByRealPolygon("28", outsideNdGeoJsons)
