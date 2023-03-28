@@ -100,6 +100,11 @@ const is筆InsideCity = (prefCode, ndgeojsonDir) => {
         console.log("--------cityFeature----------")
         console.log(JSON.stringify(cityFeature))
 
+        if (hullPolygon === null) {
+          is筆InsideCity = false
+          continue
+        }
+
         is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
   
         if (is筆InsideCity) {
