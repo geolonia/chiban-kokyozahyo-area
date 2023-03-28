@@ -94,6 +94,12 @@ const is筆InsideCity = (prefCode, ndgeojsonDir) => {
       for (const cityFeature of cityData.features) {
   
         const hullPolygon = turf.convex(筆feature)
+
+        console.log("--------hullPolygon----------")
+        console.log(JSON.stringify(hullPolygon))
+        console.log("--------cityFeature----------")
+        console.log(JSON.stringify(cityFeature))
+
         is筆InsideCity = turf.booleanWithin(hullPolygon, cityFeature)
   
         if (is筆InsideCity) {
