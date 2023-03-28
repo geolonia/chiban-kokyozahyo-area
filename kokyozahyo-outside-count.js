@@ -3,16 +3,15 @@ const glob = require("glob")
 const fs = require("fs")
 const turf = require("@turf/turf");
 const { createArrayCsvWriter } = require('csv-writer')
-const { parse } = require('csv-parse/sync');
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
 
-// const args = process.argv.slice(2)
-// const prefCode = args[0] // 都道府県コードを第一引数で指定する
+const args = process.argv.slice(2)
+const prefCode = args[0] // 都道府県コードを第一引数で指定する
 // const prefCode = "28" // 都道府県コードを第一引数で指定する
 
-// const ndgeojsonDir = `../all_zips`
+const ndgeojsonDir = `../all_zips`
 // const ndgeojsonDir = `./test`
-// const outputDir = `./output`
+const outputDir = `./output`
 // const outputDir = `./test`
 
 const getCityData = (code) => {
@@ -165,21 +164,21 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
   return { outsideFiles, errorFiles }
 }
 
-// const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
-// const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
+const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
+const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
 
-// const csvWriterOutside = createArrayCsvWriter({
-//   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-//   header: ['zip_file']
-// })
-// csvWriterOutside.writeRecords(outsideFiles)
+const csvWriterOutside = createArrayCsvWriter({
+  path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
+  header: ['zip_file']
+})
+csvWriterOutside.writeRecords(outsideFiles)
 
 
-// const errorPref = createArrayCsvWriter({
-//   path: `${outputDir}/${prefCode}_error.csv`,
-//   header: ['error_city_code_from_xml_not_found_in_admins']
-// })
-// errorPref.writeRecords(errorFiles)
+const errorPref = createArrayCsvWriter({
+  path: `${outputDir}/${prefCode}_error.csv`,
+  header: ['error_city_code_from_xml_not_found_in_admins']
+})
+errorPref.writeRecords(errorFiles)
 
 
 module.exports = {
