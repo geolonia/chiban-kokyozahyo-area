@@ -164,14 +164,14 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
   return { outsideFiles: outsideFiles, errorFiles }
 }
 
-// const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
-// const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
+const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
+const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
 
-// const csvWriterOutside = createArrayCsvWriter({
-//   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-//   header: ['zip_file']
-// })
-// csvWriterOutside.writeRecords(outsideFiles)
+const csvWriterOutside = createArrayCsvWriter({
+  path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
+  header: ['zip_file']
+})
+csvWriterOutside.writeRecords(outsideFiles)
 
 // const errorPref = createArrayCsvWriter({
 //   path: `${outputDir}/${prefCode}_error.csv`,
