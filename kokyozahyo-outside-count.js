@@ -6,14 +6,14 @@ const { createArrayCsvWriter } = require('csv-writer')
 const { parse } = require('csv-parse/sync');
 const { updateLatestCityCode } = require("./util/update-latest-city-code")
 
-const args = process.argv.slice(2)
+// const args = process.argv.slice(2)
 // const prefCode = args[0] // 都道府県コードを第一引数で指定する
-const prefCode = "28" // 都道府県コードを第一引数で指定する
+// const prefCode = "28" // 都道府県コードを第一引数で指定する
 
 // const ndgeojsonDir = `../all_zips`
-const ndgeojsonDir = `./test`
+// const ndgeojsonDir = `./test`
 // const outputDir = `./output`
-const outputDir = `./test`
+// const outputDir = `./test`
 
 const getCityData = (code) => {
 
@@ -137,34 +137,27 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
     const 筆features = get筆Features(file);
     const combine筆FeatureCollection = turf.combine(turf.featureCollection(筆features))
     const combine筆Feature = combine筆FeatureCollection.features[0]
-    const combine筆featureArea = turf.area(combine筆Feature)
 
-    let is筆InsideCity;
+    // 市区町村のポリゴンを結合
+    const combineCityFeatureCollection = turf.combine(turf.featureCollection(cityData.features))
+    const combineCityFeature = combineCityFeatureCollection.features[0]
 
-    for (const cityFeature of cityData.features) {
+    // 筆のポリゴンが市区町村と重なっているポリゴンを取得
+    const insideCityPolygon = turf.intersect(combine筆Feature, combineCityFeature);
 
-      const insideCityPolygon = turf.intersect(combine筆Feature, cityFeature);
-
-      // 筆のポリゴンが、市区町村外の場合
-      if (insideCityPolygon === null) {
-        is筆InsideCity = false;
-
-      // 筆のポリゴンが市区町村と重なっている場合
-      } else {
-
-        const insideCityPolygonArea = turf.area(insideCityPolygon)
-        const insideCityRatio = insideCityPolygonArea / combine筆featureArea
-
-        if (insideCityRatio > 0.95) {
-          is筆InsideCity = true;
-          break;
-        } else {
-          is筆InsideCity = false;
-        }
-      }
+    // 筆のポリゴンが市区町村と重なっていない場合、市外と判定する
+    if (insideCityPolygon === null) {
+      outsideFiles.push(`${basename}.zip`)
+      continue;
     }
 
-    if (!is筆InsideCity) {
+    const combine筆featureArea = turf.area(combine筆Feature)
+    const insideCityPolygonArea = turf.area(insideCityPolygon)
+
+    // 市区町村内の筆の面積が、筆の面積の95%以上なら、市内にあると判定する
+    const insideCityRatio = insideCityPolygonArea / combine筆featureArea
+
+    if (insideCityRatio < 0.95) {
       outsideFiles.push(`${basename}.zip`)
     }
   }
@@ -172,8 +165,8 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
   return { outsideFiles, errorFiles }
 }
 
-const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
-const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
+// const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
+// const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
 
 // const csvWriterOutside = createArrayCsvWriter({
 //   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
