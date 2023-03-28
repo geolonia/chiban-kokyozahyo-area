@@ -174,11 +174,11 @@ const csvWriterOutside = createArrayCsvWriter({
 csvWriterOutside.writeRecords(outsideFiles)
 
 
-const errorPref = createArrayCsvWriter({
-  path: `${outputDir}/${prefCode}_error.csv`,
-  header: ['error_city_code_from_xml_not_found_in_admins']
-})
-errorPref.writeRecords(errorFiles)
+// const errorPref = createArrayCsvWriter({
+//   path: `${outputDir}/${prefCode}_error.csv`,
+//   header: ['error_city_code_from_xml_not_found_in_admins']
+// })
+// errorPref.writeRecords(errorFiles)
 
 
 module.exports = {
