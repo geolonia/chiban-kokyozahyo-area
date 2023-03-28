@@ -167,6 +167,8 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
 const { outsideNdGeoJsons } = is筆InsideCity(prefCode, ndgeojsonDir);
 const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons);
 
+console.log(outsideFiles)
+
 const csvWriterOutside = createArrayCsvWriter({
   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
   header: ['zip_file']
