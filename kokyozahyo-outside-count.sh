@@ -9,7 +9,7 @@ for i in {1..47}
 do
   num=$(printf "%02d" $i)
   echo node kokyozahyo-outside-count.js $num
-done | parallel
+done | parallel --tmpdir /mnt/scratch/tmp
 
 endDate=$(date "+%Y/%m/%d %H:%M:%S")
 echo "end: ${endDate}" >> log.txt 
