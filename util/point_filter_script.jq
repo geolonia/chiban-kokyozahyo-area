@@ -1,4 +1,4 @@
-if (.properties."地番" | test("^[0-9]")) then
+if (.properties."地番" | test("^地区外|別図")) then
 {
   type: .type,
   geometry: {
