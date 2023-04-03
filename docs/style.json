@@ -26,7 +26,7 @@
     },
     "outside-area": {
       "type": "vector",
-      "url": "https://tileserver.geolonia.com/outside_area_files3/tiles.json?key=YOUR-API-KEY"
+      "url": "https://tileserver.geolonia.com/outside_area_files20230403-2/tiles.json?key=YOUR-API-KEY"
     },
     "chiban-cities": {
       "type": "vector",
@@ -863,24 +863,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": {
-          "stops": [
-            [
-              4,
-              "rgba(102,102,102,0.7)"
-            ],
-            [
-              7,
-              "rgba(136,136,136,0.7)"
-            ]
-          ]
-        },
-        "line-dasharray": [
-          3,
-          1,
-          1,
-          1
-        ],
+        "line-color": "#ff0000",
         "line-width": {
           "stops": [
             [
@@ -5210,39 +5193,8 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(68,68,68,0.7)",
-        "line-dasharray": [
-          3,
-          1,
-          1,
-          1
-        ],
-        "line-width": {
-          "base": 1.4,
-          "stops": [
-            [
-              8,
-              1.2
-            ],
-            [
-              12,
-              2
-            ]
-          ]
-        },
-        "line-opacity": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          6,
-          1,
-          14,
-          0.1
-        ]
+        "line-color": "#ff0000",
+        "line-width": 3
       }
     },
     {
@@ -7446,7 +7398,7 @@
       "type": "symbol",
       "source": "geolonia-gsi-custom",
       "source-layer": "place",
-      "minzoom": 9,
+      "minzoom": 8,
       "maxzoom": 20,
       "filter": [
         "all",
@@ -7514,7 +7466,7 @@
       "type": "symbol",
       "source": "geolonia-gsi-custom",
       "source-layer": "place",
-      "minzoom": 8.5,
+      "minzoom": 8,
       "maxzoom": 20,
       "filter": [
         "all",
@@ -7893,7 +7845,7 @@
       "type": "symbol",
       "source": "geolonia-gsi-custom",
       "source-layer": "place",
-      "minzoom": 11,
+      "minzoom": 8,
       "maxzoom": 20,
       "filter": [
         "all",
@@ -7959,7 +7911,7 @@
       "type": "symbol",
       "source": "geolonia-gsi-custom",
       "source-layer": "place",
-      "minzoom": 10,
+      "minzoom": 8,
       "maxzoom": 20,
       "filter": [
         "all",
@@ -8025,7 +7977,7 @@
       "type": "symbol",
       "source": "geolonia-gsi-custom",
       "source-layer": "place",
-      "minzoom": 9,
+      "minzoom": 8,
       "maxzoom": 20,
       "filter": [
         "all",
