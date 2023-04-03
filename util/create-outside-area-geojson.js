@@ -22,7 +22,7 @@ async function processLineByLine() {
   }
 
   const file = fs.readFileSync(targetPath, 'utf-8');
-  const csv = parse(file, { columns: true, skip_empty_lines: true });
+  const csv = parse(file, { skip_empty_lines: true });
   const streamWrite = fs.createWriteStream(outputPath);
 
   for (const row of csv) {
