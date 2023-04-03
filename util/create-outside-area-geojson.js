@@ -27,7 +27,8 @@ async function processLineByLine() {
 
   for (const row of csv) {
     const filePath = row[0]
-    console.log(`${index}/${csv.length}: ${ndgeojson}, ${Date.now()}`)
+    console.log(filePath)
+    console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
 
     const fileStream = fs.createReadStream(filePath);
     const rl = readline.createInterface({
