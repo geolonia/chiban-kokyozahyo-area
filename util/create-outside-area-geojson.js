@@ -26,7 +26,7 @@ async function processLineByLine() {
   const streamWrite = fs.createWriteStream(outputPath);
 
   for (const row of csv) {
-    const filePath = row[0]
+    const filePath = row
     console.log(filePath)
     console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
 
