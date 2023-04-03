@@ -26,12 +26,8 @@ async function processLineByLine() {
   const streamWrite = fs.createWriteStream(outputPath);
 
   for (const row of csv) {
-    const { zip_file } = row
-    console.log(`${index}/${csv.length}: ${zip_file}, ${Date.now()}`)
-
-    const basename = path.basename(zip_file, '.zip')
-    const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
-    // const filePath = path.join(__dirname, '../test', basename + '.ndgeojson')
+    const ndgeojson = row[0]
+    console.log(`${index}/${csv.length}: ${ndgeojson}, ${Date.now()}`)
 
     const fileStream = fs.createReadStream(filePath);
     const rl = readline.createInterface({
