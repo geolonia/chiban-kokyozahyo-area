@@ -61,7 +61,6 @@ describe('inspectOutside筆ByAreaRate', () => {
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
 
-    console.log(outsideFiles)
     expect(outsideFiles).toContainEqual(["07201-3800-546.zip", 1])
   });
 
