@@ -46,9 +46,10 @@ async function processLineByLine() {
       // properties に zip_file というキーを追加、値は zip_file の値
       if (line.includes('"properties":')) {
         const json = JSON.parse(line)
-        json.properties.zip_file = zip_file
+        json.properties.zip_file = basename
         json.properties.outside_area_rate = outside_area_rate
         const newLine = JSON.stringify(json)
+        console.log(newLine)
         streamWrite.write(`${newLine}\n`);
       } else {
         streamWrite.write(`${line}\n`);
