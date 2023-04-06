@@ -29,6 +29,7 @@ async function processLineByLine() {
     const { zip_file, outside_area_rate } = row
 
 	  console.log(zip_file, outside_area_rate)
+
 	  const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
 
@@ -45,6 +46,7 @@ async function processLineByLine() {
       // properties に zip_file というキーを追加、値は zip_file の値
       if (line.includes('"properties":')) {
         const properties = line.replace('"properties":', '').replace(',', '')
+        console.log(properties)
         const json = JSON.parse(properties)
         json.zip_file = zip_file
         json.outside_area_rate = outside_area_rate
