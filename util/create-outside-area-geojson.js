@@ -45,13 +45,10 @@ async function processLineByLine() {
 
       // properties に zip_file というキーを追加、値は zip_file の値
       if (line.includes('"properties":')) {
-        const properties = line.replace('"properties":', '').replace(',', '')
-        console.log(properties)
-        const json = JSON.parse(properties)
-        json.zip_file = zip_file
-        json.outside_area_rate = outside_area_rate
-        const newLine = `"properties": ${JSON.stringify(json)},`
-        console.log(newLine)
+        const json = JSON.parse(line)
+        json.properties.zip_file = zip_file
+        json.properties.outside_area_rate = outside_area_rate
+        const newLine = JSON.stringify(json)
         streamWrite.write(`${newLine}\n`);
       } else {
         streamWrite.write(`${line}\n`);
