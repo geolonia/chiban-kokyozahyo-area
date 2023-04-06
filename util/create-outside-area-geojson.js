@@ -22,12 +22,14 @@ async function processLineByLine() {
   }
 
   const file = fs.readFileSync(targetPath, 'utf-8');
-  const csv = parse(file, { skip_empty_lines: true });
+  const csv = parse(file, { columns: true,skip_empty_lines: true });
   const streamWrite = fs.createWriteStream(outputPath);
 
   for (const row of csv) {
     const { zip_file, outside_area_rate } = row
-    const basename = path.basename(zip_file, '.zip')
+
+	  console.log(zip_file, outside_area_rate)
+	  const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
 
     console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
