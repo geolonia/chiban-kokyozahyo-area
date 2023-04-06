@@ -15,6 +15,10 @@ echo "start $(date +%s)"
 # csvファイルのヘッダーを削除
 sed -i -e '1d' $NDGEOJSON_LIST
 
+# 以下のデータから、, 以降を sed で削除
+# 01101-4300-14.zip,0.025794829374181538
+
+sed -i "s/,.*$//" $NDGEOJSON_LIST
 sed -i "s/^/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
