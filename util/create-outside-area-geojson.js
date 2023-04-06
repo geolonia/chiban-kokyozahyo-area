@@ -26,7 +26,10 @@ async function processLineByLine() {
   const streamWrite = fs.createWriteStream(outputPath);
 
   for (const row of csv) {
-    const filePath = row[0]
+    const { zip_file, outside_area_rate } = row
+    const basename = path.basename(zip_file, '.zip')
+    const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
+
     console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
 
     const fileStream = fs.createReadStream(filePath);
@@ -36,7 +39,19 @@ async function processLineByLine() {
     });
 
     for await (const line of rl) {
-      streamWrite.write(`${line}\n`);
+
+      // properties に zip_file というキーを追加、値は zip_file の値
+      if (line.includes('"properties":')) {
+        const properties = line.replace('"properties":', '').replace(',', '')
+        const json = JSON.parse(properties)
+        json.zip_file = zip_file
+        json.outside_area_rate = outside_area_rate
+        const newLine = `"properties": ${JSON.stringify(json)},`
+        console.log(newLine)
+        streamWrite.write(`${newLine}\n`);
+      } else {
+        streamWrite.write(`${line}\n`);
+      }
     }
     index++;
   }
