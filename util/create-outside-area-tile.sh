@@ -18,9 +18,14 @@ sed -i "s/,.*$//" $NDGEOJSON_LIST
 sed -i "s/^/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
-cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
-cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer $SCRIPT_DIR/xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
-cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
+
+cat $INPUT_FILE | jq -cr -f $SCRIPT_DIR/point_filter_script.jq > ./all_points.ndgeojson
+cat $INPUT_FILE | $SCRIPT_DIR/xml_polygon_generator.sh > ./xml_polygons.ndgeojson
+cat $INPUT_FILE | jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq > ./all_polygons.ndgeojson
+
+# cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
+# cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer $SCRIPT_DIR/xml_polygon_generator.sh '{}' > ./xml_polygons.ndgeojson
+# cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq '{}' > ./all_polygons.ndgeojson
 
 mkdir -p $(pwd)/tmp
 tippecanoe \
