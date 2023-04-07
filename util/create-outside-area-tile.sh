@@ -58,6 +58,8 @@ tippecanoe \
 
 tile-join -pk -f -o $OUTPUT_FILE ./all_points.mbtiles ./xml_polygons.mbtiles ./all_polygons.mbtiles
 
+wait
+
 echo "end $(date +%s)"
 
 # 作成したタイルを s3 にアップロード
