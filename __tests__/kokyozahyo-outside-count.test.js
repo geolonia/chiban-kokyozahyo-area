@@ -99,4 +99,13 @@ describe('inspectOutside筆ByAreaRate', () => {
     expect(outsideFiles).not.toContainEqual(["47361-3600-24.zip", 0])
 
   });
+
+  test('01101-4300-14（札幌市中央区）をテスト', () => {
+    const prefCode = "01"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+
+    expect(outsideFiles).toContainEqual([ '01101-4300-14.zip', 0.025794829378027462 ])
+  });
+
 });
