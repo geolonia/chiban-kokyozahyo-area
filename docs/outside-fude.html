@@ -44,6 +44,8 @@
         // table でプロパティを表示する
         const properties = e.features[0].properties;
 
+        console.log(e.features[0]);
+
         let tableHTML = '';
         for (const key in properties) {
           tableHTML += `<tr><th>${key}</th><td>${properties[key]}</td></tr>`;

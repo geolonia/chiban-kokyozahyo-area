@@ -6,6 +6,8 @@ if (.properties."地番" | test("^(?!地区外|別図)")) then
     "coordinates": [.properties["代表点経度"], .properties["代表点緯度"]]
   },
   properties: (.properties | {
+    "zip_file,
+    "outside_area_rate,
     "市区町村名",
     "市区町村コード",
     "大字コード",
