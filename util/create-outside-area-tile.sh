@@ -20,7 +20,7 @@ sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
 
 
 cat $INPUT_FILE | jq -cr -f $SCRIPT_DIR/point_filter_script.jq > ./all_points.ndgeojson
-cat $INPUT_FILE | $SCRIPT_DIR/xml_polygon_generator.sh > ./xml_polygons.ndgeojson
+# cat $INPUT_FILE | $SCRIPT_DIR/xml_polygon_generator.sh > ./xml_polygons.ndgeojson
 cat $INPUT_FILE | jq -cr -f $SCRIPT_DIR/polygon_filter_script.jq > ./all_polygons.ndgeojson
 
 # cat $NDGEOJSON_LIST | parallel -j 16 --line-buffer jq -cr -f $SCRIPT_DIR/point_filter_script.jq '{}' > ./all_points.ndgeojson
@@ -36,17 +36,17 @@ tippecanoe \
   -t $(pwd)/tmp \
   -l outside-area ./all_points.ndgeojson
 
-# zipポリゴンは z0-13 まで
-tippecanoe \
-  -z13 -Z0 \
-  -pk \
-  --drop-smallest-as-needed \
-  -pS \
-  --detect-shared-borders \
-  --read-parallel \
-  -f -o xml_polygons.mbtiles \
-  -t $(pwd)/tmp \
-  -l represent-point ./xml_polygons.ndgeojson
+# # zipポリゴンは z0-13 まで
+# tippecanoe \
+#   -z13 -Z0 \
+#   -pk \
+#   --drop-smallest-as-needed \
+#   -pS \
+#   --detect-shared-borders \
+#   --read-parallel \
+#   -f -o xml_polygons.mbtiles \
+#   -t $(pwd)/tmp \
+#   -l represent-point ./xml_polygons.ndgeojson
 
 # ポリゴンは z12 - z15 まで
 tippecanoe \
