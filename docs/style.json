@@ -26,7 +26,7 @@
     },
     "outside-area": {
       "type": "vector",
-      "url": "https://tileserver.geolonia.com/outside_area_files20230403-2/tiles.json?key=YOUR-API-KEY"
+      "url": "https://tileserver.geolonia.com/outside_area_files20230407/tiles.json?key=YOUR-API-KEY"
     },
     "chiban-cities": {
       "type": "vector",

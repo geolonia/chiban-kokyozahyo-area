@@ -14,10 +14,6 @@ echo "start $(date +%s)"
 
 # csvファイルのヘッダーを削除
 sed -i -e '1d' $NDGEOJSON_LIST
-
-# 以下のデータから、, 以降を sed で削除
-# 01101-4300-14.zip,0.025794829374181538
-
 sed -i "s/,.*$//" $NDGEOJSON_LIST
 sed -i "s/^/\.\.\/all_zips\//" $NDGEOJSON_LIST
 sed -i "s/\.zip$/\.ndgeojson/" $NDGEOJSON_LIST
@@ -65,4 +61,4 @@ tile-join -pk -f -o $OUTPUT_FILE ./all_points.mbtiles ./xml_polygons.mbtiles ./a
 echo "end $(date +%s)"
 
 # 作成したタイルを s3 にアップロード
-# scp $BASE_DIR/outside_area_files2.mbtiles ubuntu@54.199.59.169:/mnt/efs/mbtiles/
+# scp ./outside_area_files2.mbtiles ubuntu@54.199.59.169:/mnt/efs/mbtiles/
