@@ -26,11 +26,15 @@
     },
     "outside-area": {
       "type": "vector",
-      "url": "https://tileserver.geolonia.com/outside_area_files20230407-2/tiles.json?key=YOUR-API-KEY"
+      "url": "https://tileserver.geolonia.com/outside_area_files20230409-2/tiles.json?key=YOUR-API-KEY"
     },
     "chiban-cities": {
       "type": "vector",
       "url": "https://tileserver.geolonia.com/chiban-cities/tiles.json?key=YOUR-API-KEY"
+    },
+    "border": {
+      "type": "vector",
+      "url": "https://tileserver.geolonia.com/chiban-admins-border/tiles.json?key=YOUR-API-KEY"
     }
   },
   "sprite": "https://geoloniamaps.github.io/gsi/gsi",
@@ -6769,9 +6773,9 @@
     {
       "id": "admins/line-gap",
       "type": "line",
-      "source": "chiban-cities",
-      "source-layer": "admins",
-      "minzoom": 12,
+      "source": "border",
+      "source-layer": "border",
+      "minzoom": 9,
       "paint": {
         "line-color": "#ffffff",
         "line-width": 5
@@ -6780,9 +6784,9 @@
     {
       "id": "admins/line",
       "type": "line",
-      "source": "chiban-cities",
-      "source-layer": "admins",
-      "minzoom": 12,
+      "source": "border",
+      "source-layer": "border",
+      "minzoom": 9,
       "paint": {
         "line-color": "#ff0000",
         "line-width": 3
