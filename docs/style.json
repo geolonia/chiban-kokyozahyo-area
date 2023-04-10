@@ -6832,43 +6832,6 @@
       }
     },
     {
-      "id": "outside-area/polygonName",
-      "type": "symbol",
-      "source": "outside-area",
-      "source-layer": "outside-area",
-      "minzoom": 18,
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "paint": {
-        "text-color": "#0000ff",
-        "text-halo-width": 2,
-        "text-halo-color": "#ffffff",
-        "text-halo-blur": 0.5
-      },
-      "layout": {
-        "text-field": "{市区町村名}{大字名}{地番}",
-        "text-font": [
-          "Noto Sans Regular"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          16,
-          10,
-          19,
-          16
-        ]
-      }
-    },
-    {
       "id": "oc-label-town",
       "type": "symbol",
       "source": "oceanus",
