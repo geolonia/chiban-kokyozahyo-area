@@ -159,8 +159,6 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
     const combine筆featureArea = turf.area(combine筆Feature)
     const insideCityPolygonArea = turf.area(insideCityPolygon)
 
-
-    // 市区町村内の筆の面積が、筆の面積の95%以上なら、市内にあると判定する
     const insideCityRatio = insideCityPolygonArea / combine筆featureArea
     const outsideCityRatio = 1 - insideCityRatio
 
