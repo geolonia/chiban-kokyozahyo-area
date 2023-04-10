@@ -6811,7 +6811,7 @@
         "text-halo-blur": 0.5
       },
       "layout": {
-        "text-field": "{市区町村名}{大字名}",
+        "text-field": "{市区町村名}{大字名}\n{zip_file}.zip",
         "text-font": [
           "Noto Sans CJK JP Bold"
         ],

@@ -25,7 +25,7 @@
             <div>100%</div>
           </div>
         </div>
-        <a id="donwload">ダウンロード</a>
+        <a id="donwload"></a>
         <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank"
           rel="noopener noreferrer">
           <p>「登記所備付データ」（法務省）を加工して作成</p>
@@ -80,10 +80,12 @@
       return result
     }
 
-    const downloadCSV = (csv, filename) => {
+    const downloadCSV = (csv, areaRate) => {
       const csvFile = new Blob([csv], { type: 'text/csv' })
+      const filename = `outside_area_${areaRate}.csv`
 
       const downloadLink = document.getElementById('donwload')
+      downloadLink.textContent = `筆の一覧をダウンロード(${areaRate}%以上)`
       downloadLink.download = filename
       downloadLink.href = window.URL.createObjectURL(csvFile)
     }
@@ -143,7 +145,7 @@
       setOutSideAreaCount(outsideAreaList);
 
       filterBy(0);
-      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), `outside_area_0.csv`)
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), 0)
 
 
       document.getElementById("slider").addEventListener("input", (e) => {
@@ -155,7 +157,7 @@
         });
 
         setOutSideAreaCount(outsideAreaListFiltered);
-        downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), `outside_area_${outSideRate}.csv`)
+        downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), outSideRate)
       });
     })
   </script>
