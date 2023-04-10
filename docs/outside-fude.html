@@ -14,8 +14,9 @@
   <div class="map-overlay-container">
     <div class="map-overlay top">
       <div class="map-overlay-inner">
-        <h2>登記所備付地図データ| 座標が壊れている筆を可視化</h2>
-        <label id="year">市区町村外の筆の面積の割合</label>
+        <h2>登記所備付地図データ| 座標が不正確な筆を可視化</h2>
+        <div>筆の件数: <span id="outside-area-count"></span></div>
+        <label>市区町村外の面積の割合: <span id="outside-area"></span></label>
         <input id="slider" type="range" min="0" max="100" step="1" value="0">
         <div class="legend-container">
           <div id="legend-number">
@@ -24,25 +25,50 @@
             <div>100%</div>
           </div>
         </div>
-        <!-- <a class="attribution" href="https://www.city.osaka.lg.jp/contents/wdu290/opendata/#cat-all_data-00000382">
-          <p>「食品営業許可施設一覧（令和3年12月31日現在）」（大阪市）を加工して作成</p>
-        </a> -->
+        <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank" rel="noopener noreferrer">
+          <p>「登記所備付データ」（法務省）を加工して作成</p>
+        </a>
       </div>
     </div>
   </div>
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
+
+    const fetchCSV = async (url) => {
+      const response = await fetch(url);
+      let text = await response.text();
+      text = text.replace(/^.+\n/, '');
+
+      const rows = text.split('\n').map((row) => {
+        const columns = row.split(',');
+        return columns;
+      });
+      return rows;
+    }
+
+    const setOutSideAreaCount = (outsideAreaList) => {
+      document.getElementById("outside-area-count").textContent = `${outsideAreaList.length.toLocaleString()}件`;
+    }
+
+    const filterBy = (selectedOutSideRate) => {
+      const filters = [">=", ["to-number",["get", "outside_area_rate"]], selectedOutSideRate/100];
+      map.setFilter("outside-area/polygonFill", filters);
+      map.setFilter("outside-area/polygonBorder", filters);
+      map.setFilter("outside-area/polygonNameCity", filters);
+      map.setFilter("outside-area/pointHeatmap", filters);
+
+      document.getElementById("outside-area").textContent = `${selectedOutSideRate}%`;
+    }
+
     const map = new geolonia.Map({
       container: "#map",
       style: "./style.json"
     });
 
-    map.on('load', () => {
+    map.on('load', async () => {
 
-      // popupでクリックした地点のデータを表示する
       map.on('click', 'outside-area/polygonFill', (e) => {
 
-        // table でプロパティを表示する
         const properties = e.features[0].properties;
 
         let tableHTML = '';
@@ -69,6 +95,23 @@
           .setMaxWidth("300px")
           .addTo(map);
       });
+
+      const outsideAreaList = await fetchCSV('outside_area_files.csv');
+      setOutSideAreaCount(outsideAreaList);
+
+      filterBy(0);
+
+      document.getElementById("slider").addEventListener("input", (e) => {
+        const outSideRate = parseInt(e.target.value, 10);
+        filterBy(outSideRate);
+
+        const outsideAreaListFiltered = outsideAreaList.filter((row) => {
+          return Number(row[1]) >= outSideRate/100;
+        });
+
+        setOutSideAreaCount(outsideAreaListFiltered);
+      });
+
 
     })
   </script>
