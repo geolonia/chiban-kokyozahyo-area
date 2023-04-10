@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, defaultSliderValue-scale=1.0">
   <title>法務省登記所備付地図データ 公共座標の筆かつ所属する市区町村外の座標を可視化</title>
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -36,6 +36,9 @@
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
 
+    const defaultSliderValue = 1
+    const exportCSVHeader = ['zip_file', 'outside_area_rate']
+
     const fetchCSV = async (url) => {
       const response = await fetch(url);
       let text = await response.text();
@@ -60,18 +63,16 @@
 
       data = typeof array !== 'object' ? JSON.parse(array) : array
 
-      const keys = Object.keys(data[0])
-
       result = ''
-      result += keys.join(columnDelimiter)
+      result += exportCSVHeader.join(columnDelimiter)
       result += lineDelimiter
 
-      data.forEach(function (item) {
+      data.forEach(function (items) {
         let ctr = 0
-        keys.forEach(function (key) {
+        items.forEach(function (item) {
           if (ctr > 0) result += columnDelimiter
 
-          result += item[key]
+          result += item
           ctr++
         })
         result += lineDelimiter
@@ -98,7 +99,7 @@
     }
 
     const setOutSideAreaCount = (outsideAreaList) => {
-      document.getElementById("outside-area-count").textContent = `${outsideAreaList.length.toLocaleString()}件`;
+      document.getElementById("outside-area-count").textContent = `${(outsideAreaList.length).toLocaleString()}件`;
     }
 
     const filterBy = (selectedOutSideRate) => {
@@ -117,8 +118,6 @@
       
       document.getElementById("outside-area").textContent = label;
     }
-
-    const initial = 1
 
     const map = new geolonia.Map({
       container: "#map",
@@ -157,11 +156,11 @@
       });
 
       const outsideAreaList = await fetchCSV('outside_area_files.csv');
-      const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, initial);
+      const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, defaultSliderValue);
       setOutSideAreaCount(outsideAreaListFiltered);
 
-      filterBy(initial);
-      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), initial)
+      filterBy(defaultSliderValue);
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), defaultSliderValue)
 
 
       document.getElementById("slider").addEventListener("input", (e) => {
