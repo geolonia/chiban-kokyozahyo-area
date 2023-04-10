@@ -38,22 +38,52 @@
 
     map.on('load', () => {
 
+    //   {
+    //   "id": "outside-area/polygonFill",
+    //   "type": "fill",
+    //   "source": "outside-area",
+    //   "source-layer": "outside-area",
+    //   "minzoom": 12,
+    //   "filter": [
+    //     "==",
+    //     "$type",
+    //     "Polygon"
+    //   ],
+    //   "paint": {
+    //     "fill-color": "#0000ff",
+    //     "fill-opacity": 0.2
+    //   }
+    // },
+    
+
       // popupでクリックした地点のデータを表示する
       map.on('click', 'outside-area/polygonFill', (e) => {
 
         // table でプロパティを表示する
         const properties = e.features[0].properties;
 
-        console.log(e.features[0]);
-
         let tableHTML = '';
         for (const key in properties) {
-          tableHTML += `<tr><th>${key}</th><td>${properties[key]}</td></tr>`;
+          let label = key;
+          let value = properties[key];
+
+          if (label === 'outside_area_rate') {
+            label = '筆の市区町村外の面積の割合'
+            value = `${value*100}%`
+          }
+
+          if (label === 'zip_file') {
+            label = 'zipファイル名'
+            value = `${value}.zip`
+          }
+
+          tableHTML += `<tr><th>${label}</th><td>${value}</td></tr>`;
         }
 
         const popup = new geolonia.Popup()
           .setLngLat(e.lngLat)
           .setHTML(`<table>${tableHTML}</table>`)
+          .setMaxWidth("300px")
           .addTo(map);
       });
 
