@@ -6,29 +6,30 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>法務省登記所備付地図データ 公共座標の筆かつ所属する市区町村外の座標を可視化</title>
-  <style>
-    html,
-    body,
-    #map {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-    table {
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid rgb(209 213 219);
-      padding: 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-
   <div id="map" class="left" data-zoom="5" data-lat="37.01" data-lng="138.09" data-hash="on" data-marker="off"></div>
-
+  <div class="map-overlay-container">
+    <div class="map-overlay top">
+      <div class="map-overlay-inner">
+        <h2>登記所備付地図データ| 座標が壊れている筆を可視化</h2>
+        <label id="year">市区町村外の筆の面積の割合</label>
+        <input id="slider" type="range" min="0" max="100" step="1" value="0">
+        <div class="legend-container">
+          <div id="legend-number">
+            <div>0%</div>
+            <div>50%</div>
+            <div>100%</div>
+          </div>
+        </div>
+        <!-- <a class="attribution" href="https://www.city.osaka.lg.jp/contents/wdu290/opendata/#cat-all_data-00000382">
+          <p>「食品営業許可施設一覧（令和3年12月31日現在）」（大阪市）を加工して作成</p>
+        </a> -->
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
     const map = new geolonia.Map({
@@ -51,7 +52,7 @@
 
           if (label === 'outside_area_rate') {
             label = '筆の市区町村外の面積の割合'
-            value = `${value*100}%`
+            value = `${value * 100}%`
           }
 
           if (label === 'zip_file') {
