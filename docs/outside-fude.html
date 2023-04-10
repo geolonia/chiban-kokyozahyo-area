@@ -14,7 +14,7 @@
   <div class="map-overlay-container">
     <div class="map-overlay top">
       <div class="map-overlay-inner">
-        <h2>登記所備付地図データ<br/>座標が不正確な筆を可視化</h2>
+        <h2>登記所備付地図データ<br />座標が不正確な筆を可視化</h2>
         <div>筆の件数: <span id="outside-area-count"></span></div>
         <label>市区町村外の面積の割合: <span id="outside-area"></span></label>
         <input id="slider" type="range" min="0" max="100" step="1" value="0">
@@ -25,7 +25,9 @@
             <div>100%</div>
           </div>
         </div>
-        <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank" rel="noopener noreferrer">
+        <a id="donwload">ダウンロード</a>
+        <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank"
+          rel="noopener noreferrer">
           <p>「登記所備付データ」（法務省）を加工して作成</p>
         </a>
       </div>
@@ -46,18 +48,59 @@
       return rows;
     }
 
+    const convertArrayOfObjectsToCSV = (array) => {
+      let result, columnDelimiter, lineDelimiter, data
+
+      if (array == null || !array.length) {
+        return null
+      }
+
+      columnDelimiter = ','
+      lineDelimiter = '\n'
+
+      data = typeof array !== 'object' ? JSON.parse(array) : array
+
+      const keys = Object.keys(data[0])
+
+      result = ''
+      result += keys.join(columnDelimiter)
+      result += lineDelimiter
+
+      data.forEach(function (item) {
+        let ctr = 0
+        keys.forEach(function (key) {
+          if (ctr > 0) result += columnDelimiter
+
+          result += item[key]
+          ctr++
+        })
+        result += lineDelimiter
+      })
+
+      return result
+    }
+
+    const downloadCSV = (csv, filename) => {
+      const csvFile = new Blob([csv], { type: 'text/csv' })
+
+      const downloadLink = document.getElementById('donwload')
+      downloadLink.download = filename
+      downloadLink.href = window.URL.createObjectURL(csvFile)
+    }
+
+
     const setOutSideAreaCount = (outsideAreaList) => {
       document.getElementById("outside-area-count").textContent = `${outsideAreaList.length.toLocaleString()}件`;
     }
 
     const filterBy = (selectedOutSideRate) => {
-      const filters = [">=", ["to-number",["get", "outside_area_rate"]], selectedOutSideRate/100];
+      const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
       map.setFilter("outside-area/polygonFill", filters);
       map.setFilter("outside-area/polygonBorder", filters);
       map.setFilter("outside-area/polygonNameCity", filters);
       map.setFilter("outside-area/pointHeatmap", filters);
 
-      document.getElementById("outside-area").textContent = `${selectedOutSideRate}%`;
+      document.getElementById("outside-area").textContent = `${selectedOutSideRate}%以上`;
     }
 
     const map = new geolonia.Map({
@@ -100,19 +143,20 @@
       setOutSideAreaCount(outsideAreaList);
 
       filterBy(0);
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), `outside_area_0.csv`)
+
 
       document.getElementById("slider").addEventListener("input", (e) => {
         const outSideRate = parseInt(e.target.value, 10);
         filterBy(outSideRate);
 
         const outsideAreaListFiltered = outsideAreaList.filter((row) => {
-          return Number(row[1]) >= outSideRate/100;
+          return Number(row[1]) >= outSideRate / 100;
         });
 
         setOutSideAreaCount(outsideAreaListFiltered);
+        downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), `outside_area_${outSideRate}.csv`)
       });
-
-
     })
   </script>
 </body>
