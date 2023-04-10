@@ -22,7 +22,7 @@ td {
   z-index: 2;
   top: 10px;
   left: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 1);
   padding: 5px 20px;
   border: 1px solid #909090;
   max-width: 300px;

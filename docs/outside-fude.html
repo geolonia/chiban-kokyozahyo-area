@@ -16,11 +16,11 @@
       <div class="map-overlay-inner">
         <h2>登記所備付地図データ<br />座標が不正確な筆を可視化</h2>
         <div>筆の件数: <span id="outside-area-count"></span></div>
-        <label>市区町村外の面積の割合: <span id="outside-area"></span></label>
-        <input id="slider" type="range" min="0" max="100" step="1" value="0">
+        <label>市区町村外の面積の割合 <span id="outside-area"></span></label>
+        <input id="slider" type="range" min="1" max="100" step="1" value="1">
         <div class="legend-container">
           <div id="legend-number">
-            <div>0%</div>
+            <div>1%</div>
             <div>50%</div>
             <div>100%</div>
           </div>
@@ -83,13 +83,19 @@
     const downloadCSV = (csv, areaRate) => {
       const csvFile = new Blob([csv], { type: 'text/csv' })
       const filename = `outside_area_${areaRate}.csv`
+      const label = areaRate === 0 ? '> 0' : '>= ' + areaRate
 
       const downloadLink = document.getElementById('donwload')
-      downloadLink.textContent = `筆の一覧をダウンロード(${areaRate}%以上)`
+      downloadLink.textContent = `筆の一覧をダウンロード(${label}%)`
       downloadLink.download = filename
       downloadLink.href = window.URL.createObjectURL(csvFile)
     }
 
+    const filterOutSideArea = (outsideAreaList, selectedOutSideRate) => {
+      return outsideAreaList.filter((row) => {
+        return Number(row[1]) >= selectedOutSideRate / 100;
+      });
+    }
 
     const setOutSideAreaCount = (outsideAreaList) => {
       document.getElementById("outside-area-count").textContent = `${outsideAreaList.length.toLocaleString()}件`;
@@ -102,8 +108,17 @@
       map.setFilter("outside-area/polygonNameCity", filters);
       map.setFilter("outside-area/pointHeatmap", filters);
 
-      document.getElementById("outside-area").textContent = `${selectedOutSideRate}%以上`;
+      let label;
+      if (selectedOutSideRate === 0) {
+        label = '> 0%';
+      } else {
+        label = `>= ${selectedOutSideRate}%`;
+      }
+      
+      document.getElementById("outside-area").textContent = label;
     }
+
+    const initial = 1
 
     const map = new geolonia.Map({
       container: "#map",
@@ -142,19 +157,18 @@
       });
 
       const outsideAreaList = await fetchCSV('outside_area_files.csv');
-      setOutSideAreaCount(outsideAreaList);
+      const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, initial);
+      setOutSideAreaCount(outsideAreaListFiltered);
 
-      filterBy(0);
-      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), 0)
+      filterBy(initial);
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), initial)
 
 
       document.getElementById("slider").addEventListener("input", (e) => {
         const outSideRate = parseInt(e.target.value, 10);
         filterBy(outSideRate);
 
-        const outsideAreaListFiltered = outsideAreaList.filter((row) => {
-          return Number(row[1]) >= outSideRate / 100;
-        });
+        const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, outSideRate);
 
         setOutSideAreaCount(outsideAreaListFiltered);
         downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), outSideRate)
