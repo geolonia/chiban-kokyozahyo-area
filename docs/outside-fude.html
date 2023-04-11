@@ -37,7 +37,7 @@
   <script>
 
     const defaultSliderValue = 50
-    const exportCSVHeader = ['xml_file', 'outside_area_rate']
+    const exportCSVHeader = ['zip_file', 'outside_area_rate']
 
     const fetchCSV = async (url) => {
       const response = await fetch(url);
@@ -140,9 +140,9 @@
             value = `${value * 100}%`
           }
 
-          if (label === 'xml_file') {
+          if (label === 'zip_file') {
             label = 'XMLファイル名'
-            value = `${value}.xml`
+            value = `${value}.zip`
           }
 
           tableHTML += `<tr><th>${label}</th><td>${value}</td></tr>`;
