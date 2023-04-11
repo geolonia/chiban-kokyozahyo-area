@@ -33,7 +33,8 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
   return turf.featureCollection(clusterFeatures)
 }
 
-exportRepresentPointGeojson(csv, '../../all_zips')
+const pointsGeojson = exportRepresentPointGeojson(csv, '../../all_zips')
+fs.writeFileSync(path.join(__dirname, '../output/represent-points.geojson'), JSON.stringify(pointsGeojson))
 
 module.exports = {
   exportRepresentPointGeojson,
