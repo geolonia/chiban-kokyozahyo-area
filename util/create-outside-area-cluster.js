@@ -17,6 +17,9 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
     
     const row = csv[i]
     const basename = row[0].split('.')[0]
+
+    console.log(`${i} : ${basename}`)
+    
     const filePath = path.join(__dirname, zips_dir, basename + '.ndgeojson')
 
     const raw  = fs.readFileSync(filePath, 'utf8')
