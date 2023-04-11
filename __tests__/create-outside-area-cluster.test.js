@@ -1,19 +1,17 @@
 const fs = require('fs');
 const {
   exportRepresentPointGeojson,
-} = require('../util/create-outside-area-cluster'); // your_functions_file.js は実際のファイル名に置き換えてください。
+} = require('../util/create-outside-area-cluster');
 
 describe('getCityData', () => {
-  test('正常なデータを返すこと', () => {
+  test('ポリゴンから重心の GeoJSON を作成する', () => {
 
     const csv = [
       ['xml_file','outside_area_rate'],
       ['01101-4300-49', '']
     ]
 
-    const ndegeojson = exportRepresentPointGeojson(csv, '../__tests__/data')
-    console.log(ndegeojson)
-
-    // expect(cityName).toEqual("兵庫県神戸市西区")
+    const geojson = exportRepresentPointGeojson(csv, '../__tests__/data')
+    expect(geojson.features[0].geometry.coordinates).toEqual([141.3077950650103,43.06041850133848])  
   });
 });
