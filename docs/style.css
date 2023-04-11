@@ -23,9 +23,10 @@ td {
   top: 10px;
   left: 10px;
   background-color: rgba(255, 255, 255, 1);
-  padding: 5px 20px;
+  padding: 25px 20px;
   border: 1px solid #909090;
   max-width: 300px;
+
 }
 
 .map-overlay-container label {
@@ -63,9 +64,21 @@ h2 {
 }
 
 .attribution {
-  font-size: 12px;
+  font-size: 11px;
 }
 
-#download {
+.attribution p {
+  margin: 0;
+}
+
+#download_btn {
   font-size: 14px;
+  margin: 15px 0;
+  display: none;
+  width: 100%;
+  line-height: 1.5;
+}
+
+#download_btn i {
+  margin: 0 5px;
 }

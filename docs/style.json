@@ -28,6 +28,10 @@
       "type": "vector",
       "url": "https://tileserver.geolonia.com/outside_area_files20230409-2/tiles.json?key=YOUR-API-KEY"
     },
+    "outside-area-cluster": {
+      "type": "geojson",
+      "data": "https://geolonia.github.io/chiban-zahyo-map/outside-area-cluster.geojson"
+    },
     "chiban-cities": {
       "type": "vector",
       "url": "https://tileserver.geolonia.com/chiban-cities/tiles.json?key=YOUR-API-KEY"
