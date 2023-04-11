@@ -39,7 +39,7 @@
   <script>
 
     const defaultSliderValue = 50
-    const exportCSVHeader = ['zip_file', 'outside_area_rate']
+    const exportCSVHeader = ['xml_file', 'outside_area_rate']
     const layers = [
       'outside-area/polygonFill',
       'outside-area/polygonBorder',
@@ -78,6 +78,11 @@
       data.forEach(function (items) {
         let ctr = 0
         items.forEach(function (item) {
+          
+          if (item.endsWith('.zip')) {
+            item = item.replace(/\.zip$/, '.xml')
+          }
+
           if (ctr > 0) result += columnDelimiter
 
           result += item
@@ -166,7 +171,7 @@
 
           if (label === 'zip_file') {
             label = 'XMLファイル名'
-            value = `${value}.zip`
+            value = `${value}.xml`
           }
 
           tableHTML += `<tr><th>${label}</th><td>${value}</td></tr>`;
