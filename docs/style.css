@@ -42,10 +42,6 @@ td {
   font-size: 16px;
 }
 
-.legend-container a {
-  font-size: 14px;
-}
-
 #legend-number {
   width: 100%;
   display: flex;
@@ -68,4 +64,8 @@ h2 {
 
 .attribution {
   font-size: 12px;
+}
+
+#download {
+  font-size: 14px;
 }

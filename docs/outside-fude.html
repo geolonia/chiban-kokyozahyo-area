@@ -25,7 +25,7 @@
             <div>100%</div>
           </div>
         </div>
-        <a id="donwload"></a>
+        <a id="download"></a>
         <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank"
           rel="noopener noreferrer">
           <p>「登記所備付データ」（法務省）を加工して作成</p>
@@ -38,6 +38,12 @@
 
     const defaultSliderValue = 50
     const exportCSVHeader = ['zip_file', 'outside_area_rate']
+    const layers = [
+      'outside-area/polygonFill',
+      'outside-area/polygonBorder',
+      'outside-area/polygonNameCity',
+      'outside-area/pointHeatmap'
+    ];
 
     const fetchCSV = async (url) => {
       const response = await fetch(url);
@@ -86,7 +92,7 @@
       const filename = `outside_area_${areaRate}.csv`
       const label = areaRate === 0 ? '> 0' : '>= ' + areaRate
 
-      const downloadLink = document.getElementById('donwload')
+      const downloadLink = document.getElementById('download')
       downloadLink.textContent = `XMLファイルの一覧をダウンロード(${label}%)`
       downloadLink.download = filename
       downloadLink.href = window.URL.createObjectURL(csvFile)
@@ -109,13 +115,6 @@
     }
 
     const filterBy = (selectedOutSideRate) => {
-
-      const layers = [
-        'outside-area/polygonFill',
-        'outside-area/polygonBorder',
-        'outside-area/polygonNameCity',
-        'outside-area/pointHeatmap'
-      ];
 
       if (selectedOutSideRate === 0) {
 
@@ -141,6 +140,10 @@
     });
 
     map.on('load', async () => {
+
+      layers.forEach((layer) => {
+        map.setLayoutProperty(layer, 'visibility', 'visible');
+      });
 
       map.on('click', 'outside-area/polygonFill', (e) => {
 
