@@ -28,8 +28,6 @@ async function processLineByLine() {
   for (const row of csv) {
     const { zip_file, outside_area_rate } = row
 
-	  console.log(zip_file, outside_area_rate)
-
 	  const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
 
