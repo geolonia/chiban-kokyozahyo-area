@@ -98,25 +98,41 @@
       });
     }
 
-    const setOutSideAreaCount = (outsideAreaList) => {
+    const setOutSideAreaCount = (outsideAreaList, selectedOutSideRate) => {
+
+      if (selectedOutSideRate === 0) {
+        document.getElementById("outside-area-count").textContent = `-- 件`;
+        return;
+      }
+
       document.getElementById("outside-area-count").textContent = `${(outsideAreaList.length).toLocaleString()}件`;
     }
 
     const filterBy = (selectedOutSideRate) => {
-      const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
-      map.setFilter("outside-area/polygonFill", filters);
-      map.setFilter("outside-area/polygonBorder", filters);
-      map.setFilter("outside-area/polygonNameCity", filters);
-      map.setFilter("outside-area/pointHeatmap", filters);
 
-      let label;
+      const layers = [
+        'outside-area/polygonFill',
+        'outside-area/polygonBorder',
+        'outside-area/polygonNameCity',
+        'outside-area/pointHeatmap'
+      ];
+
       if (selectedOutSideRate === 0) {
-        label = '> 0%';
+
+        layers.forEach((layer) => {
+          map.setLayoutProperty(layer, 'visibility', 'none');
+        });
+
       } else {
-        label = `>= ${selectedOutSideRate}%`;
+        const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
+
+        layers.forEach((layer) => {
+          map.setLayoutProperty(layer, 'visibility', 'visible');
+          map.setFilter(layer, filters);
+        });
       }
       
-      document.getElementById("outside-area").textContent = label;
+      document.getElementById("outside-area").textContent = `>= ${selectedOutSideRate}%`;
     }
 
     const map = new geolonia.Map({
@@ -169,7 +185,7 @@
 
         const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, outSideRate);
 
-        setOutSideAreaCount(outsideAreaListFiltered);
+        setOutSideAreaCount(outsideAreaListFiltered, outSideRate);
         downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), outSideRate)
       });
     })

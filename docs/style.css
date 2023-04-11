@@ -42,6 +42,10 @@ td {
   font-size: 16px;
 }
 
+.legend-container a {
+  font-size: 14px;
+}
+
 #legend-number {
   width: 100%;
   display: flex;
