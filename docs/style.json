@@ -26,11 +26,15 @@
     },
     "outside-area": {
       "type": "vector",
-      "url": "https://tileserver.geolonia.com/outside_area_files20230403-2/tiles.json?key=YOUR-API-KEY"
+      "url": "https://tileserver.geolonia.com/outside_area_files20230409-2/tiles.json?key=YOUR-API-KEY"
     },
     "chiban-cities": {
       "type": "vector",
       "url": "https://tileserver.geolonia.com/chiban-cities/tiles.json?key=YOUR-API-KEY"
+    },
+    "border": {
+      "type": "vector",
+      "url": "https://tileserver.geolonia.com/chiban-admins-border/tiles.json?key=YOUR-API-KEY"
     }
   },
   "sprite": "https://geoloniamaps.github.io/gsi/gsi",
@@ -6670,6 +6674,9 @@
         "$type",
         "Point"
       ],
+      "layout": {
+        "visibility": "none"
+      },
       "paint": {
         "heatmap-weight": [
           "interpolate",
@@ -6746,6 +6753,9 @@
         "$type",
         "Polygon"
       ],
+      "layout": {
+        "visibility": "none"
+      },
       "paint": {
         "fill-color": "#0000ff",
         "fill-opacity": 0.2
@@ -6762,6 +6772,9 @@
         "$type",
         "Polygon"
       ],
+      "layout": {
+        "visibility": "none"
+      },
       "paint": {
         "line-color": "#0000ff"
       }
@@ -6769,9 +6782,9 @@
     {
       "id": "admins/line-gap",
       "type": "line",
-      "source": "chiban-cities",
-      "source-layer": "admins",
-      "minzoom": 12,
+      "source": "border",
+      "source-layer": "border",
+      "minzoom": 9,
       "paint": {
         "line-color": "#ffffff",
         "line-width": 5
@@ -6780,9 +6793,9 @@
     {
       "id": "admins/line",
       "type": "line",
-      "source": "chiban-cities",
-      "source-layer": "admins",
-      "minzoom": 12,
+      "source": "border",
+      "source-layer": "border",
+      "minzoom": 9,
       "paint": {
         "line-color": "#ff0000",
         "line-width": 3
@@ -6807,7 +6820,7 @@
         "text-halo-blur": 0.5
       },
       "layout": {
-        "text-field": "{市区町村名}{大字名}",
+        "text-field": "{市区町村名}{大字名}\n{zip_file}.zip",
         "text-font": [
           "Noto Sans CJK JP Bold"
         ],
@@ -6824,44 +6837,8 @@
           10,
           19,
           16
-        ]
-      }
-    },
-    {
-      "id": "outside-area/polygonName",
-      "type": "symbol",
-      "source": "outside-area",
-      "source-layer": "outside-area",
-      "minzoom": 18,
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "paint": {
-        "text-color": "#0000ff",
-        "text-halo-width": 2,
-        "text-halo-color": "#ffffff",
-        "text-halo-blur": 0.5
-      },
-      "layout": {
-        "text-field": "{市区町村名}{大字名}{地番}",
-        "text-font": [
-          "Noto Sans Regular"
         ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          16,
-          10,
-          19,
-          16
-        ]
+        "visibility": "none"
       }
     },
     {

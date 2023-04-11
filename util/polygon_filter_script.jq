@@ -3,6 +3,8 @@ if (.properties."地番" | test("^(?!地区外|別図)")) then
   type: .type,
   geometry: .geometry,
   properties: (.properties | {
+    "zip_file",
+    "outside_area_rate",
     "市区町村名",
     "市区町村コード",
     "大字コード",

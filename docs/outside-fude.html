@@ -4,57 +4,193 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, defaultSliderValue-scale=1.0">
   <title>法務省登記所備付地図データ 公共座標の筆かつ所属する市区町村外の座標を可視化</title>
-  <style>
-    html,
-    body,
-    #map {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-    table {
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid rgb(209 213 219);
-      padding: 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-
   <div id="map" class="left" data-zoom="5" data-lat="37.01" data-lng="138.09" data-hash="on" data-marker="off"></div>
-
+  <div class="map-overlay-container">
+    <div class="map-overlay top">
+      <div class="map-overlay-inner">
+        <h2>登記所備付地図データ<br />座標が不正確な筆を可視化</h2>
+        <div>地図XMLファイルの件数: <span id="outside-area-count"></span></div>
+        <label>市区町村外の面積の割合 <span id="outside-area"></span></label>
+        <input id="slider" type="range" min="0" max="100" step="1" value="50">
+        <div class="legend-container">
+          <div id="legend-number">
+            <div>0%</div>
+            <div>50%</div>
+            <div>100%</div>
+          </div>
+        </div>
+        <a id="download"></a>
+        <a class="attribution" href="https://front.geospatial.jp/houmu-chiseki/" target="_blank"
+          rel="noopener noreferrer">
+          <p>「登記所備付データ」（法務省）を加工して作成</p>
+        </a>
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
+
+    const defaultSliderValue = 50
+    const exportCSVHeader = ['zip_file', 'outside_area_rate']
+    const layers = [
+      'outside-area/polygonFill',
+      'outside-area/polygonBorder',
+      'outside-area/polygonNameCity',
+      'outside-area/pointHeatmap'
+    ];
+
+    const fetchCSV = async (url) => {
+      const response = await fetch(url);
+      let text = await response.text();
+      text = text.replace(/^.+\n/, '');
+
+      const rows = text.split('\n').map((row) => {
+        const columns = row.split(',');
+        return columns;
+      });
+      return rows;
+    }
+
+    const convertArrayOfObjectsToCSV = (array) => {
+      let result, columnDelimiter, lineDelimiter, data
+
+      if (array == null || !array.length) {
+        return null
+      }
+
+      columnDelimiter = ','
+      lineDelimiter = '\n'
+
+      data = typeof array !== 'object' ? JSON.parse(array) : array
+
+      result = ''
+      result += exportCSVHeader.join(columnDelimiter)
+      result += lineDelimiter
+
+      data.forEach(function (items) {
+        let ctr = 0
+        items.forEach(function (item) {
+          if (ctr > 0) result += columnDelimiter
+
+          result += item
+          ctr++
+        })
+        result += lineDelimiter
+      })
+
+      return result
+    }
+
+    const downloadCSV = (csv, areaRate) => {
+      const csvFile = new Blob([csv], { type: 'text/csv' })
+      const filename = `outside_area_${areaRate}.csv`
+      const label = areaRate === 0 ? '> 0' : '>= ' + areaRate
+
+      const downloadLink = document.getElementById('download')
+      downloadLink.textContent = `XMLファイルの一覧をダウンロード(${label}%)`
+      downloadLink.download = filename
+      downloadLink.href = window.URL.createObjectURL(csvFile)
+    }
+
+    const filterOutSideArea = (outsideAreaList, selectedOutSideRate) => {
+      return outsideAreaList.filter((row) => {
+        return Number(row[1]) >= selectedOutSideRate / 100;
+      });
+    }
+
+    const setOutSideAreaCount = (outsideAreaList, selectedOutSideRate) => {
+
+      if (selectedOutSideRate === 0) {
+        document.getElementById("outside-area-count").textContent = `-- 件`;
+        return;
+      }
+
+      document.getElementById("outside-area-count").textContent = `${(outsideAreaList.length).toLocaleString()}件`;
+    }
+
+    const filterBy = (selectedOutSideRate) => {
+
+      if (selectedOutSideRate === 0) {
+
+        layers.forEach((layer) => {
+          map.setLayoutProperty(layer, 'visibility', 'none');
+        });
+
+      } else {
+        const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
+
+        layers.forEach((layer) => {
+          map.setLayoutProperty(layer, 'visibility', 'visible');
+          map.setFilter(layer, filters);
+        });
+      }
+      
+      document.getElementById("outside-area").textContent = `>= ${selectedOutSideRate}%`;
+    }
+
     const map = new geolonia.Map({
       container: "#map",
       style: "./style.json"
     });
 
-    map.on('load', () => {
+    map.on('load', async () => {
 
-      // popupでクリックした地点のデータを表示する
+      layers.forEach((layer) => {
+        map.setLayoutProperty(layer, 'visibility', 'visible');
+      });
+
       map.on('click', 'outside-area/polygonFill', (e) => {
 
-        // table でプロパティを表示する
         const properties = e.features[0].properties;
 
         let tableHTML = '';
         for (const key in properties) {
-          tableHTML += `<tr><th>${key}</th><td>${properties[key]}</td></tr>`;
+          let label = key;
+          let value = properties[key];
+
+          if (label === 'outside_area_rate') {
+            label = '市区町村外の面積<br/>（割合）'
+            value = `${value * 100}%`
+          }
+
+          if (label === 'zip_file') {
+            label = 'XMLファイル名'
+            value = `${value}.zip`
+          }
+
+          tableHTML += `<tr><th>${label}</th><td>${value}</td></tr>`;
         }
 
         const popup = new geolonia.Popup()
           .setLngLat(e.lngLat)
           .setHTML(`<table>${tableHTML}</table>`)
+          .setMaxWidth("300px")
           .addTo(map);
       });
 
+      const outsideAreaList = await fetchCSV('outside_area_files.csv');
+      const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, defaultSliderValue);
+      setOutSideAreaCount(outsideAreaListFiltered);
+
+      filterBy(defaultSliderValue);
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), defaultSliderValue)
+
+
+      document.getElementById("slider").addEventListener("input", (e) => {
+        const outSideRate = parseInt(e.target.value, 10);
+        filterBy(outSideRate);
+
+        const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, outSideRate);
+
+        setOutSideAreaCount(outsideAreaListFiltered, outSideRate);
+        downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), outSideRate)
+      });
     })
   </script>
 </body>

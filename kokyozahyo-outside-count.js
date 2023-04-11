@@ -152,19 +152,17 @@ const inspectOutside筆ByAreaRate = (prefCode, outsideNdGeoJsons) => {
 
     // 筆のポリゴンが市区町村と重なっていない場合、市外と判定する
     if (insideCityPolygon === null) {
-      outsideFiles.push([`${basename}.zip`])
+      outsideFiles.push([`${basename}.zip`, 1])
       continue;
     }
 
     const combine筆featureArea = turf.area(combine筆Feature)
     const insideCityPolygonArea = turf.area(insideCityPolygon)
 
-    // 市区町村内の筆の面積が、筆の面積の95%以上なら、市内にあると判定する
     const insideCityRatio = insideCityPolygonArea / combine筆featureArea
+    const outsideCityRatio = 1 - insideCityRatio
 
-    if (insideCityRatio < 0.95) {
-      outsideFiles.push([`${basename}.zip`])
-    }
+    outsideFiles.push([`${basename}.zip`, outsideCityRatio])
   }
 
   return { outsideFiles: outsideFiles, errorFiles }
@@ -175,16 +173,9 @@ const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons
 
 const csvWriterOutside = createArrayCsvWriter({
   path: `${outputDir}/${prefCode}_all_kyokyozahyo_outside_files.csv`,
-  header: ['zip_file']
+  header: ['zip_file', 'outside_area_rate']
 })
 csvWriterOutside.writeRecords(outsideFiles)
-
-// const errorPref = createArrayCsvWriter({
-//   path: `${outputDir}/${prefCode}_error.csv`,
-//   header: ['error_city_code_from_xml_not_found_in_admins']
-// })
-// errorPref.writeRecords(errorFiles)
-
 
 module.exports = {
   getCityData,

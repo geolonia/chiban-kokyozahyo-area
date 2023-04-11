@@ -60,18 +60,16 @@ describe('inspectOutside筆ByAreaRate', () => {
     const prefCode = "07"
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
-    for (const outsideFile of outsideFiles) {
-      expect(outsideFile).toContain("07201-3800-546.zip")
-    }
+
+    expect(outsideFiles).toContainEqual(["07201-3800-546.zip", 1])
   });
 
   test('完全に市区町村内の筆をテスト', () => {
     const prefCode = "01"
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
-    for (const outsideFile of outsideFiles) {
-      expect(outsideFile).not.toContain("01101-4300-49.zip")
-    }
+
+    expect(outsideFiles).not.toContainEqual(["01101-4300-49.zip", 0])
   });
 
   // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#15.96/36.052106/139.720922
@@ -79,9 +77,8 @@ describe('inspectOutside筆ByAreaRate', () => {
     const prefCode = "11"
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
-    for (const outsideFile of outsideFiles) {
-      expect(outsideFile).toContain("11464-0315-77.zip")
-    }
+
+    expect(outsideFiles).toContainEqual(["11464-0315-77.zip", 0.06099143473440716])
   });
 
   // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#16.42/35.992103/139.573547
@@ -90,9 +87,7 @@ describe('inspectOutside筆ByAreaRate', () => {
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
 
-    for (const outsideFile of outsideFiles) {
-      expect(outsideFile).not.toContain("11219-0310-117.zip")
-    }
+    expect(outsideFiles).not.toContainEqual(["11219-0310-117.zip", 0])
   });
 
   // https://geolonia.github.io/chiban-kokyozahyo-area/outside-fude.html#14.69/26.3421/126.81422
@@ -100,8 +95,17 @@ describe('inspectOutside筆ByAreaRate', () => {
     const prefCode = "47"
     const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
     const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
-    for (const outsideFile of outsideFiles) {
-      expect(outsideFile).not.toContain("47361-3600-24.zip")
-    }
+ 
+    expect(outsideFiles).not.toContainEqual(["47361-3600-24.zip", 0])
+
   });
+
+  test('01101-4300-14（札幌市中央区）をテスト', () => {
+    const prefCode = "01"
+    const { outsideNdGeoJsons } = is筆InsideCity(prefCode, "__tests__/data")
+    const { outsideFiles } = inspectOutside筆ByAreaRate(prefCode, outsideNdGeoJsons)
+
+    expect(outsideFiles).toContainEqual([ '01101-4300-14.zip', 0.025794829378027462 ])
+  });
+
 });
