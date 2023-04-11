@@ -30,9 +30,7 @@ async function processLineByLine() {
 
 	  const basename = path.basename(zip_file, '.zip')
     const filePath = path.join(__dirname, '../../all_zips', basename + '.ndgeojson')
-
-    console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
-
+	  console.log(`${index}/${csv.length}: ${filePath}, ${Date.now()}`)
     const fileStream = fs.createReadStream(filePath);
     const rl = readline.createInterface({
       input: fileStream,
@@ -47,7 +45,6 @@ async function processLineByLine() {
         json.properties.zip_file = basename
         json.properties.outside_area_rate = outside_area_rate
         const newLine = JSON.stringify(json)
-        console.log(newLine)
         streamWrite.write(`${newLine}\n`);
       } else {
         streamWrite.write(`${line}\n`);
