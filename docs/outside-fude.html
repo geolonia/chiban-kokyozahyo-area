@@ -44,8 +44,12 @@
       'outside-area/polygonFill',
       'outside-area/polygonBorder',
       'outside-area/polygonNameCity',
-      'outside-area/pointHeatmap'
     ];
+    const clusterLayers = [
+      'outside-area/cluster',
+      'outside-area/cluster-count',
+      'outside-area/unclustered-point',
+    ]
 
     const fetchCSV = async (url) => {
       const response = await fetch(url);
@@ -124,21 +128,38 @@
       document.getElementById("outside-area-count").textContent = `${(outsideAreaList.length).toLocaleString()}件`;
     }
 
-    const filterBy = (selectedOutSideRate) => {
+    const filterBy = (selectedOutSideRate, data) => {
+
+      const allLayers = [...layers, ...clusterLayers];
 
       if (selectedOutSideRate === 0) {
 
-        layers.forEach((layer) => {
+        allLayers.forEach((layer) => {
           map.setLayoutProperty(layer, 'visibility', 'none');
         });
+        
 
       } else {
         const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
 
         layers.forEach((layer) => {
-          map.setLayoutProperty(layer, 'visibility', 'visible');
           map.setFilter(layer, filters);
         });
+
+        allLayers.forEach((layer) => {
+          map.setLayoutProperty(layer, 'visibility', 'visible');
+        });
+
+        const newGeoJSON = {
+          type: 'FeatureCollection',
+          features: []
+        };
+        const newFeatures = [...data.features]
+        newGeoJSON.features = newFeatures.filter((feature) => {
+          return feature.properties.outside_area_rate >= selectedOutSideRate / 100;
+        });
+
+        map.getSource('outside-area-cluster').setData(newGeoJSON);
       }
       
       document.getElementById("outside-area").textContent = `>= ${selectedOutSideRate}%`;
@@ -151,8 +172,111 @@
 
     map.on('load', async () => {
 
+      const response = await fetch(
+        'https://geolonia.github.io/chiban-kokyozahyo-area/outside-area-cluster.geojson'
+      );
+      const data = await response.json();
+
+      map.addSource('outside-area-cluster', { 
+        type: 'geojson', 
+        data: data,
+        cluster: true,
+        clusterMaxZoom: 11,
+        clusterRadius: 50
+      });
+
+      map.addLayer({
+        "id": "outside-area/cluster",
+        "type": "circle",
+        "source": "outside-area-cluster",
+        "filter": [
+          "has",
+          "point_count"
+        ],
+        "paint": {
+          "circle-color": "#0000ff",
+          "circle-radius": [
+            "step",
+            [
+              "get",
+              "point_count"
+            ],
+            20,
+            100,
+            30,
+            750,
+            40
+          ]
+        }
+      })
+
+      map.addLayer({
+        "id": "outside-area/cluster-count",
+        "type": "symbol",
+        "source": "outside-area-cluster",
+        "filter": [
+          "has",
+          "point_count"
+        ],
+        "layout": {
+          "text-field": "{point_count_abbreviated}",
+          "text-font": [
+            "Noto Sans CJK JP Bold"
+          ],
+          "text-size": 14
+        },
+        "paint": {
+          "text-color": "#fff"
+        }
+      })
+
+      map.addLayer({
+        "id": "outside-area/unclustered-point",
+        "type": "circle",
+        "source": "outside-area-cluster",
+        "maxzoom": 11,
+        "filter": [
+          "!",
+          [
+            "has",
+            "point_count"
+          ]
+        ],
+        "paint": {
+          "circle-color": "#0000ff",
+          "circle-radius": 4,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#fff"
+        }
+      });
+
       layers.forEach((layer) => {
         map.setLayoutProperty(layer, 'visibility', 'visible');
+      });
+
+      map.on('click', 'outside-area/cluster', (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['outside-area/cluster']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('outside-area-cluster').getClusterExpansionZoom(
+          clusterId,
+          (err, zoom) => {
+            if (err) return;
+
+            map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          }
+        );
+      });
+
+      map.on('mouseenter', 'outside-area/cluster', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'outside-area/cluster', () => {
+        map.getCanvas().style.cursor = '';
       });
 
       map.on('click', 'outside-area/polygonFill', (e) => {
@@ -188,13 +312,13 @@
       const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, defaultSliderValue);
       setOutSideAreaCount(outsideAreaListFiltered);
 
-      filterBy(defaultSliderValue);
+      filterBy(defaultSliderValue, data);
       downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), defaultSliderValue)
 
 
       document.getElementById("slider").addEventListener("input", (e) => {
         const outSideRate = parseInt(e.target.value, 10);
-        filterBy(outSideRate);
+        filterBy(outSideRate, data);
 
         const outsideAreaListFiltered = filterOutSideArea(outsideAreaList, outSideRate);
 
