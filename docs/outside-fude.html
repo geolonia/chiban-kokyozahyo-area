@@ -113,6 +113,11 @@
     }
 
     const filterOutSideArea = (outsideAreaList, selectedOutSideRate) => {
+
+      if (selectedOutSideRate === 0) {
+        return [[]]
+      }
+
       return outsideAreaList.filter((row) => {
         return Number(row[1]) >= selectedOutSideRate / 100;
       });
@@ -313,7 +318,7 @@
       setOutSideAreaCount(outsideAreaListFiltered);
 
       filterBy(defaultSliderValue, data);
-      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaList), defaultSliderValue)
+      downloadCSV(convertArrayOfObjectsToCSV(outsideAreaListFiltered), defaultSliderValue)
 
 
       document.getElementById("slider").addEventListener("input", (e) => {
