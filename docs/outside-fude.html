@@ -19,7 +19,7 @@
         <h2 class="h5">座標が不正確な<br/>地図XMLファイルを可視化</h2>
         <div>地図XMLファイルの件数: <span id="outside-area-count"></span></div>
         <label>市区町村外の面積の割合 <span id="outside-area"></span></label>
-        <input id="slider" type="range" min="1" max="100" step="1" value="50">
+        <input id="slider" type="range" min="1" max="100" step="1" value="100">
         <div class="legend-container">
           <div id="legend-number">
             <div>0%</div>
@@ -42,7 +42,7 @@
   <script src="https://cdn.geolonia.com/v1/embed?geolonia-api-key=YOUR-API-KEY"></script>
   <script>
 
-    const defaultSliderValue = 50
+    const defaultSliderValue = 100
     const exportCSVHeader = ['xml_file', 'outside_area_rate']
     const layers = [
       'outside-area/polygonFill',
