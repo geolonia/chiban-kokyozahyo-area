@@ -44,7 +44,9 @@
       'outside-area/polygonFill',
       'outside-area/polygonBorder',
       'outside-area/polygonNameCity',
-      'outside-area/pointHeatmap'
+      // 'outside-area/cluster',
+      // 'outside-area/outside-area/cluster-count',
+      // 'outside-area/unclustered-point',
     ];
 
     const fetchCSV = async (url) => {
@@ -134,10 +136,17 @@
 
       } else {
         const filters = [">=", ["to-number", ["get", "outside_area_rate"]], selectedOutSideRate / 100];
+        const newFilter = ['all', filters];
 
         layers.forEach((layer) => {
           map.setLayoutProperty(layer, 'visibility', 'visible');
-          map.setFilter(layer, filters);
+
+          const existingFilter = map.getFilter(layer);
+          if (existingFilter) {
+            newFilter.push(existingFilter);
+          }
+
+          map.setFilter(layer, newFilter);
         });
       }
       
