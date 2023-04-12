@@ -19,7 +19,7 @@
         <h2 class="h5">座標が不正確な<br/>地図XMLファイルを可視化</h2>
         <div>地図XMLファイルの件数: <span id="outside-area-count"></span></div>
         <label>市区町村外の面積の割合 <span id="outside-area"></span></label>
-        <input id="slider" type="range" min="0" max="100" step="1" value="50">
+        <input id="slider" type="range" min="1" max="100" step="1" value="50">
         <div class="legend-container">
           <div id="legend-number">
             <div>0%</div>
@@ -101,7 +101,7 @@
     const downloadCSV = (csv, areaRate) => {
       const csvFile = new Blob([csv], { type: 'text/csv' })
       const filename = `outside_area_${areaRate}.csv`
-      const label = areaRate === 0 ? '> 0' : '>= ' + areaRate
+      const label = '>= ' + areaRate
 
       const downloadLink = document.getElementById('download')
       downloadLink.download = filename
