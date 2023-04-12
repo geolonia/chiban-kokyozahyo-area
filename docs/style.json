@@ -28,6 +28,13 @@
       "type": "vector",
       "url": "https://tileserver.geolonia.com/outside_area_files20230409-2/tiles.json?key=YOUR-API-KEY"
     },
+    "outside-area-cluster": {
+      "type": "geojson",
+      "data": "http://127.0.0.1:8080/docs/outside-area-cluster.geojson",
+      "cluster": true,
+      "clusterMaxZoom": 11,
+      "clusterRadius": 50
+    },
     "chiban-cities": {
       "type": "vector",
       "url": "https://tileserver.geolonia.com/chiban-cities/tiles.json?key=YOUR-API-KEY"
@@ -6763,85 +6770,6 @@
       }
     },
     {
-      "id": "outside-area/pointHeatmap",
-      "type": "heatmap",
-      "source": "outside-area",
-      "source-layer": "outside-area",
-      "maxzoom": 12,
-      "filter": [
-        "==",
-        "$type",
-        "Point"
-      ],
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "heatmap-weight": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "get",
-            "sqrt_point_count"
-          ],
-          0,
-          0,
-          100,
-          1
-        ],
-        "heatmap-intensity": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          1,
-          9,
-          3
-        ],
-        "heatmap-color": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "heatmap-density"
-          ],
-          0,
-          "rgba(33,102,172,0)",
-          0.2,
-          "rgb(103,169,207)",
-          0.4,
-          "rgb(209,229,240)",
-          0.6,
-          "rgb(253,219,199)",
-          0.8,
-          "rgb(239,138,98)",
-          1,
-          "rgb(178,24,43)"
-        ],
-        "heatmap-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "get",
-            "point_count"
-          ],
-          0,
-          2,
-          100,
-          30
-        ]
-      }
-    },
-    {
       "id": "oc-label-town",
       "type": "symbol",
       "source": "oceanus",
@@ -8192,6 +8120,65 @@
         "text-halo-width": 2,
         "text-halo-color": "#ffffff",
         "text-halo-blur": 0.5
+      }
+    },
+    {
+      "id": "outside-area/cluster",
+      "type": "circle",
+      "source": "outside-area-cluster",
+      "filter": [
+        "has",
+        "point_count"
+      ],
+      "paint": {
+        "circle-color": "#ff0000",
+        "circle-radius": [
+          "step",
+          [
+            "get",
+            "point_count"
+          ],
+          20,
+          100,
+          30,
+          750,
+          40
+        ]
+      }
+    },
+    {
+      "id": "outside-area/cluster-count",
+      "type": "symbol",
+      "source": "outside-area-cluster",
+      "filter": [
+        "has",
+        "point_count"
+      ],
+      "layout": {
+        "text-field": "{point_count_abbreviated}",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 12
+      }
+    },
+    {
+      "id": "outside-area/unclustered-point",
+      "type": "circle",
+      "source": "outside-area-cluster",
+      "maxzoom": 11,
+      "filter": [
+        "!",
+        [
+          "has",
+          "point_count"
+        ]
+      ],
+      "paint": {
+        "circle-color": "#ff0000",
+        "circle-radius": 4,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
       }
     }
   ]

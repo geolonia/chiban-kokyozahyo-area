@@ -19,7 +19,7 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
     const basename = row[0].split('.')[0]
 
     console.log(`${i} : ${basename}`)
-    
+
     const filePath = path.join(__dirname, zips_dir, basename + '.ndgeojson')
 
     const raw  = fs.readFileSync(filePath, 'utf8')
@@ -37,7 +37,7 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
 }
 
 const pointsGeojson = exportRepresentPointGeojson(csv, '../../all_zips')
-fs.writeFileSync(path.join(__dirname, '../output/represent-points.geojson'), JSON.stringify(pointsGeojson))
+fs.writeFileSync(path.join(__dirname, '../output/outside-area-cluster.geojson'), JSON.stringify(pointsGeojson))
 
 module.exports = {
   exportRepresentPointGeojson,

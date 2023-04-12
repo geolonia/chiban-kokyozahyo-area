@@ -155,6 +155,24 @@
         map.setLayoutProperty(layer, 'visibility', 'visible');
       });
 
+      map.on('click', 'outside-area/cluster', (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['outside-area/cluster']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('outside-area-cluster').getClusterExpansionZoom(
+          clusterId,
+          (err, zoom) => {
+            if (err) return;
+
+            map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          }
+        );
+      });
+
       map.on('click', 'outside-area/polygonFill', (e) => {
 
         const properties = e.features[0].properties;
