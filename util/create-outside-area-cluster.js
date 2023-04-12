@@ -17,6 +17,7 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
     
     const row = csv[i]
     const basename = row[0].split('.')[0]
+    const outside_area_rate = row[1]
 
     console.log(`${i} : ${basename}`)
 
@@ -29,6 +30,10 @@ const exportRepresentPointGeojson = (csv, zips_dir) => {
     })
     const geojson = turf.featureCollection(features)
     const centroid = turf.centroid(geojson);
+
+    centroid.properties = {
+      outside_area_rate,
+    }
 
     clusterFeatures.push(centroid)
   }
