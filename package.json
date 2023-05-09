@@ -14,7 +14,9 @@
     "csv-parse": "^5.3.5",
     "csv-writer": "^1.6.0",
     "glob": "^8.1.0",
-    "progress-bar-cli": "^1.0.4"
+    "jsdom": "^22.0.0",
+    "progress-bar-cli": "^1.0.4",
+    "proj4": "^2.9.0"
   },
   "devDependencies": {
     "jest": "^29.5.0"
