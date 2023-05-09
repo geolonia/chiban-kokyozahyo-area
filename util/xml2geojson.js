@@ -3,12 +3,9 @@ const {proj4, JP_ZONE_TO_EPSG_MAP} = require("./proj")
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-const xml2geojson = (xmlString) => {
+const getCityBorders = (xmlString) => {
 
-  const geojson = {
-    "type": "FeatureCollection",
-    "features": []
-  }
+  const features = []
 
   const dom = new JSDOM(xmlString);
   const parser = new dom.window.DOMParser();
@@ -49,17 +46,17 @@ const xml2geojson = (xmlString) => {
             coordinates: coordinates
           },
           properties: {
-            name: `${name} 市区町村界線`,
+            // name: `${name} 市区町村界線`,
             idref: idref
           }
         }
 
-        geojson.features.push(feature)
+        features.push(feature)
       }
     }
   }
 
-  return geojson
+  return features
 }
 
 const getCoordinates = (dom, nodes) => {
@@ -86,4 +83,4 @@ const getCoordinates = (dom, nodes) => {
   }
 }
 
-module.exports = xml2geojson
+module.exports = getCityBorders

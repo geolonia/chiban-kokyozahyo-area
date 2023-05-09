@@ -16,7 +16,8 @@
     "glob": "^8.1.0",
     "jsdom": "^22.0.0",
     "progress-bar-cli": "^1.0.4",
-    "proj4": "^2.9.0"
+    "proj4": "^2.9.0",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "jest": "^29.5.0"
